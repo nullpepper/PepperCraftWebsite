@@ -1,2 +1,3 @@
 # PepperCraft
-jlx and jbr's c++ project
+A MineCraft Server -- PepperCraft
+
