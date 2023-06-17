@@ -92,7 +92,7 @@
                     </div>
                 </div>
             </div>
-            <script type="text/javascript">
+            <script type="text/javascript" id="online">
                 var jq = jQuery;
                 $.ajax({
                     type: 'get',
@@ -101,7 +101,6 @@
                         var max = body.maximum;
                         var online = body.online;
                         var sample = body.sample;
-
                         var players = "";
                         for (i = 0, len = sample.length; i < len; i++) {
                             players = players + sample[i].name + ",";
