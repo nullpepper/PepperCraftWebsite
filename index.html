@@ -96,9 +96,9 @@
                 var jq = jQuery;
                 $.ajax({
                     type: 'get',
-                    url: "https://api.miri.site/mcPlayer/get.php?ip=axe.0mc.me&port=10718",
+                    url: "https://mcping.me/api/java/pcraft.eu.org",
                     success: function(body, heads, status) {
-                        var max = body.max;
+                        var max = body.maximum;
                         var online = body.online;
                         var sample = body.sample;
 
@@ -106,18 +106,15 @@
                         for (i = 0, len = sample.length; i < len; i++) {
                             players = players + sample[i].name + ",";
                         }
-
-
                         $("#online").text(online);
                         $("#max").text(max);
                         $("#players").text(players);
-
                     }
                 })
             </script>
             <!-- Project One Row-->
             <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
-                <div class="col-lg-6"><img class="img-fluid" src="assets/img/demo-image-01.jpg" alt="..." /></div>
+                <div class="col-lg-6"><img class="img-fluid" src="assets/img/Image-1.jpg" alt="..." /></div>
                 <div class="col-lg-6">
                     <div class="bg-black text-center h-100 project">
                         <div class="d-flex h-100">
