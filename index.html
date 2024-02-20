@@ -23,10 +23,12 @@
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand" href="#page-top">PepperCraft</a>
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    主菜单
-                    <i class="fas fa-bars"></i>
-                </button>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation">
+                主菜单
+                <i class="fas fa-bars"></i>
+            </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="#about">关于我们</a></li>
@@ -70,25 +72,30 @@
         <div class="container px-4 px-lg-5">
             <!-- Featured Project Row-->
             <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
-                <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/Image-3.jpg" alt="..." /></div>
+                <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/Image-3.jpg"
+                        alt="..." /></div>
                 <div class="col-xl-4 col-lg-5">
                     <div class="featured-text text-center text-lg-left">
                         <h4>开服时间:</h4>
                         <p class="text-black-50 mb-0">
                             服务器2022/12/12日开服,距今<br>
-                            <div id="time">
-                                <script>
-                                    var box = document.getElementById("time");
-                                    window.onload = function() {
-                                        window.setInterval(function() {
-                                            starttime = new Date("2022/12/12 09:00:00");
-                                            time = new Date();
-                                            var res = Math.round((time - starttime) / 1000 / 60 / 60);
-                                            box.innerHTML = (res + "小时");
-                                        }, 1000);
-                                    }
-                                </script>
-                            </div>
+                        <div id="time">
+                            <script>
+                                function updateCountdown() {
+                                    const targetDate = new Date('2022-12-12');
+                                    const timeDifference = targetDate.getTime() - Date.now();
+                                    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                                    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                                    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+                                    document.getElementById('time').innerHTML = `${0 - days} 天 ${0 - hours} 小时 ${0 - minutes} 分钟 ${0 - seconds} 秒`;
+                                }
+
+                                updateCountdown();
+
+                                setInterval(updateCountdown, 1000);
+                            </script>
+                        </div>
                         </p>
                     </div>
                 </div>
@@ -98,7 +105,7 @@
                 $.ajax({
                     type: 'get',
                     url: "https://mcping.me/api/java/pcraft.eu.org",
-                    success: function(body, heads, status) {
+                    success: function (body, heads, status) {
                         var max = body.maximum;
                         var online = body.online;
                         var sample = body.sample;
@@ -135,7 +142,9 @@
                         <div class="d-flex h-100">
                             <div class="project-text w-100 my-auto text-center text-lg-right">
                                 <h4 class="text-white">Mountains</h4>
-                                <p class="mb-0 text-white-50">Another example of a project with its respective description. These sections work well responsively as well, try this theme on a small screen!</p>
+                                <p class="mb-0 text-white-50">Another example of a project with its respective
+                                    description. These sections work well responsively as well, try this theme on a
+                                    small screen!</p>
                                 <hr class="d-none d-lg-block mb-0 me-0" />
                             </div>
                         </div>
@@ -150,7 +159,8 @@
             <h2 class="text-black-50">⭐服务器特色</h2>
             <!-- Featured Project Row-->
             <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
-                <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/Redstone.png" alt="..." /></div>
+                <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/Redstone.png"
+                        alt="..." /></div>
                 <div class="col-xl-4 col-lg-5">
                     <div class="featured-text text-center text-lg-left">
                         <h4>⚡允许红石</h4>
@@ -166,7 +176,9 @@
                         <div class="d-flex h-100">
                             <div class="project-text w-100 my-auto text-center text-lg-left">
                                 <h4 class="text-white">💣保护自己</h4>
-                                <p class="mb-0 text-white-50">为了体验更纯净的原版,服务器没有领地插件,不仅能体验到朝不保夕的刺激,还能更容易引发战争<br>当然,如果你是种田玩家,我推荐离开主城7000格以上,并选择高空或地下建筑</p>
+                                <p class="mb-0 text-white-50">
+                                    为了体验更纯净的原版,服务器没有领地插件,不仅能体验到朝不保夕的刺激,还能更容易引发战争<br>当然,如果你是种田玩家,我推荐离开主城7000格以上,并选择高空或地下建筑
+                                </p>
                                 <hr class="d-none d-lg-block mb-0 ms-0" />
                             </div>
                         </div>
@@ -181,7 +193,8 @@
                         <div class="d-flex h-100">
                             <div class="project-text w-100 my-auto text-center text-lg-right">
                                 <h4 class="text-white">💗团结友爱</h4>
-                                <p class="mb-0 text-white-50">虽然战争不可避免,但是我们的玩家素质较高,不会随意引战,管理团队也十分友善.无论你是网易转来的玩家,或是刚入坑不久的萌新,我们都会指导你游玩</p>
+                                <p class="mb-0 text-white-50">
+                                    虽然战争不可避免,但是我们的玩家素质较高,不会随意引战,管理团队也十分友善.无论你是网易转来的玩家,或是刚入坑不久的萌新,我们都会指导你游玩</p>
                                 <hr class="d-none d-lg-block mb-0 me-0" />
                             </div>
                         </div>
