@@ -1,28 +1,33 @@
 <!DOCTYPE html>
 <html lang="zh_cn">
-<script src="https://cdn.staticfile.org/jquery/3.1.1/jquery.min.js"></script>
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>PepperCraft</title>
+    <meta name="description" content="Pepper Craft - 高版本纯净生存公益服" />
+    <meta name="author" content="PepperCraft" />
+    <title>Pepper Craft - 忠于原版的高版本生存</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Font Awesome icons (free version)-->
-    <script src="js/all.js" crossorigin="anonymous"></script>
-    <!-- Google fonts-->
-    <link href="css/Varela.css" rel="stylesheet" />
-    <link href="css/Nunito.css" rel="stylesheet" />
-    <!-- Core theme CSS (includes Bootstrap)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.staticfile.org/jquery/3.1.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
+    <style>
+        /* 简单的自定义样式修正 */
+        .masthead {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 75%, #000 100%), url('assets/img/bg-masthead.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body id="page-top">
-    <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="#page-top">PepperCraft</a>
+            <a class="navbar-brand" href="#page-top">Pepper Craft</a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -31,153 +36,108 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#about">关于我们</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#projects">服务器数据</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#NiuBi">服务器特色</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#joinus">如何加入</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">关于服务器</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#projects">运行状态</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">特色玩法</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#signup">加入我们</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-    <!-- 标题-->
+    
     <header class="masthead">
         <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
             <div class="d-flex justify-content-center">
                 <div class="text-center">
                     <h1 class="mx-auto my-0 text-uppercase">Pepper Craft</h1>
-                    <span><br></span>
-                    <h2 class="text-white-50 mx-auto mt-2 mb-5">IP:PEPPER.LTD</h2>
-                    <a class="btn btn-primary" href="#about">现在加入</a>
+                    <h2 class="text-white-50 mx-auto mt-2 mb-5">“基于原版，忠于原版”<br>PVP、生存、生电融合的高质量社区</h2>
+                    <a class="btn btn-primary" href="#about">了解更多</a>
                 </div>
             </div>
         </div>
     </header>
-    <!-- 关于-->
+
     <section class="about-section text-center" id="about">
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-lg-8">
-                    <h2 class="text-white mb-4">什么是PepperCraft？</h2>
+                    <h2 class="text-white mb-4">初心与承诺</h2>
                     <p class="text-white-50">
-                        PepperCraft是一个优秀、活跃的新兴MineCraft服务器。该服务器旨在为玩家提供快乐、流畅的游戏体验！<br /> 想 加入我们？
-                        <a href="#joinus">点击这里</a>加入我们！如果你想了解服务器的特色,请点击<a href="#NiuBi">这里</a>
+                        PepperCraft 是一个由 Minecraft 爱好者发起的<b>高版本纯净生存公益服</b>。<br>
+                        我们致力于打造日均在线 30+ 的高质量社区。
+                    </p>
+                    <p class="text-white-50" style="font-weight: bold; color: #f4d03f !important;">
+                        📢 2025年1月郑重决定：3年内不再清除存档内容！<br>
+                        存档长久保障，欢迎入驻！
                     </p>
                 </div>
             </div>
-            <img class="img-fluid" src="assets/img/ipad.png" alt="..." />
+            <img class="img-fluid" src="assets/img/ipad.png" alt="Server Screenshot" />
         </div>
     </section>
-    <!-- Projects-->
+
     <section class="projects-section bg-light" id="projects">
         <div class="container px-4 px-lg-5">
-            <!-- Featured Project Row-->
             <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
-                <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/Image-3.jpg"
-                        alt="..." /></div>
+                <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/Image-3.jpg" alt="Server Landscape" /></div>
                 <div class="col-xl-4 col-lg-5">
                     <div class="featured-text text-center text-lg-left">
-                        <h4>开服时间:</h4>
+                        <h4>稳定运行</h4>
                         <p class="text-black-50 mb-0">
-                            服务器2022/12/12日开服,距今<br>
-                        <div id="time">
+                            服务器自 2023年2月20日 开启<br>
+                            我们已经稳定运行了：
+                        </p>
+                        <div id="time" class="h5 mt-2 text-primary">
                             <script>
                                 function updateCountdown() {
-                                    const targetDate = new Date('2022-12-12');
-                                    const timeDifference = targetDate.getTime() - Date.now();
+                                    // 修改为正确的开服时间 2023-02-20
+                                    const targetDate = new Date('2023-02-20T00:00:00');
+                                    const now = new Date();
+                                    const timeDifference = now - targetDate; // 现在时间 - 开服时间 = 运行时间
+                                    
                                     const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
                                     const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                                     const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
                                     const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-                                    document.getElementById('time').innerHTML = `${0 - days} 天 ${0 - hours} 小时 ${0 - minutes} 分钟 ${0 - seconds} 秒`;
+                                    
+                                    document.getElementById('time').innerHTML = `${days} 天 ${hours} 小时 ${minutes} 分钟 ${seconds} 秒`;
                                 }
-
                                 updateCountdown();
-
                                 setInterval(updateCountdown, 1000);
                             </script>
                         </div>
-                        </p>
                     </div>
                 </div>
             </div>
+
             <script type="text/javascript">
-                var jq = jQuery;
-                $.ajax({
-                    type: 'get',
-                    url: "https://mcping.me/api/java/pcraft.eu.org",
-                    success: function (body, heads, status) {
-                        var max = body.maximum;
-                        var online = body.online;
-                        var sample = body.sample;
-                        var players = "";
-                        for (i = 0, len = sample.length; i < len; i++) {
-                            players = players + sample[i].name + ",";
+                $(document).ready(function() {
+                    $.ajax({
+                        type: 'get',
+                        url: "https://mcping.me/api/java/pepper.ltd", // 更新为正确的IP
+                        success: function (body) {
+                            var online = body.online;
+                            $("#online").text(online);
+                        },
+                        error: function() {
+                            $("#online").text("离线/维护中");
                         }
-                        $("#online").text(online);
-                        $("#max").text(max);
-                        $("#players").text(players);
-                    }
-                })
+                    });
+                });
             </script>
-            <!-- Project One Row-->
+
             <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
-                <div class="col-lg-6"><img class="img-fluid" src="assets/img/Image-1.jpg" alt="..." /></div>
+                <div class="col-lg-6"><img class="img-fluid" src="assets/img/Image-1.jpg" alt="Players" /></div>
                 <div class="col-lg-6">
                     <div class="bg-black text-center h-100 project">
                         <div class="d-flex h-100">
                             <div class="project-text w-100 my-auto text-center text-lg-left">
-                                <h4 class="text-white">在线玩家</h4>
-                                <p class="mb-0 text-white-50">服务器目前在线:<span id="#online">人<br>当然,人少也不要退,先进Q群坐坐吧~</p>
-                                <hr class="d-none d-lg-block mb-0 ms-0" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Project Two Row-->
-            <div class="row gx-0 justify-content-center">
-                <div class="col-lg-6"><img class="img-fluid" src="assets/img/Image-2.jpg" alt="..." /></div>
-                <div class="col-lg-6 order-lg-first">
-                    <div class="bg-black text-center h-100 project">
-                        <div class="d-flex h-100">
-                            <div class="project-text w-100 my-auto text-center text-lg-right">
-                                <h4 class="text-white">Mountains</h4>
-                                <p class="mb-0 text-white-50">Another example of a project with its respective
-                                    description. These sections work well responsively as well, try this theme on a
-                                    small screen!</p>
-                                <hr class="d-none d-lg-block mb-0 me-0" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- 服务器特色-->
-    <section class="projects-section bg-light" id="NiuBi">
-        <div class="container px-4 px-lg-5">
-            <h2 class="text-black-50">⭐服务器特色</h2>
-            <!-- Featured Project Row-->
-            <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
-                <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/Redstone.png"
-                        alt="..." /></div>
-                <div class="col-xl-4 col-lg-5">
-                    <div class="featured-text text-center text-lg-left">
-                        <h4>⚡允许红石</h4>
-                        <p class="text-black-50 mb-0">与其他纯净生存不同的是,我们允许各种大型红石!<br>小到高速熔炉、自动农场,大到TNT复制,12核刷铁机,我们都会支持!</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Project One Row-->
-            <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
-                <div class="col-lg-6"><img class="img-fluid" src="assets/img/Residence.png" alt="..." /></div>
-                <div class="col-lg-6">
-                    <div class="bg-black text-center h-100 project">
-                        <div class="d-flex h-100">
-                            <div class="project-text w-100 my-auto text-center text-lg-left">
-                                <h4 class="text-white">💣保持纯净</h4>
+                                <h4 class="text-white">实时状态</h4>
                                 <p class="mb-0 text-white-50">
-                                      <br>
+                                    当前在线人数：<span id="online" style="color:#64a19d; font-weight:bold;">加载中...</span> 人
+                                    <br><br>
+                                    没有臃肿的虚拟货币，没有复杂的地皮系统。<br>
+                                    只有最纯粹的方块世界。
                                 </p>
                                 <hr class="d-none d-lg-block mb-0 ms-0" />
                             </div>
@@ -185,16 +145,58 @@
                     </div>
                 </div>
             </div>
-            <!-- Project Two Row-->
+        </div>
+    </section>
+
+    <section class="projects-section bg-light" id="features">
+        <div class="container px-4 px-lg-5">
+            <h2 class="text-black-50 mb-5 text-center">⭐ 服务器特色</h2>
+            
+            <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+                <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/Redstone.png" alt="Redstone" /></div>
+                <div class="col-xl-4 col-lg-5">
+                    <div class="featured-text text-center text-lg-left">
+                        <h4>⚡ 优化原版 & 红石自由</h4>
+                        <p class="text-black-50 mb-0">
+                            扩展内容符合原版风格，跟随 Mojang 同步更新。<br>
+                            允许高频红石、刷铁机，支持地毯/TNT等特性复制。<br>
+                            生电玩家的乐园，拥有壮观的增强地形生成。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
+                <div class="col-lg-6"><img class="img-fluid" src="assets/img/Residence.png" alt="Survival" /></div>
+                <div class="col-lg-6">
+                    <div class="bg-black text-center h-100 project">
+                        <div class="d-flex h-100">
+                            <div class="project-text w-100 my-auto text-center text-lg-left">
+                                <h4 class="text-white">🛡️ 拒绝冗余，回归纯净</h4>
+                                <p class="mb-0 text-white-50">
+                                    ❌ 拒绝：飞行指令、充值特权、奇怪副本、臃肿货币。<br>
+                                    ✅ 拥有：原版钻石实体货币、自由开关的领地保护、基于区块的领地系统。<br>
+                                    这里只有最纯正的生存挑战。
+                                </p>
+                                <hr class="d-none d-lg-block mb-0 ms-0" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row gx-0 justify-content-center">
-                <div class="col-lg-6"><img class="img-fluid" src="assets/img/photo.png" alt="..." /></div>
+                <div class="col-lg-6"><img class="img-fluid" src="assets/img/photo.png" alt="Technical" /></div>
                 <div class="col-lg-6 order-lg-first">
                     <div class="bg-black text-center h-100 project">
                         <div class="d-flex h-100">
                             <div class="project-text w-100 my-auto text-center text-lg-right">
-                                <h4 class="text-white">💗团结友爱</h4>
+                                <h4 class="text-white">🛠️ 强大的技术保障</h4>
                                 <p class="mb-0 text-white-50">
-                                    虽然战争不可避免,但是我们的玩家素质较高,不会随意引战,管理团队也十分友善.无论你是网易转来的玩家,或是刚入坑不久的萌新,我们都会指导你游玩</p>
+                                    腐竹拥有 3年以上 专业开发经验，服内插件自研率超 18.5%。<br>
+                                    配备本地/异地双重备份与付费级混合反作弊。<br>
+                                    强制正版验证，完全遵守官方 EULA。
+                                </p>
                                 <hr class="d-none d-lg-block mb-0 me-0" />
                             </div>
                         </div>
@@ -203,86 +205,61 @@
             </div>
         </div>
     </section>
-    <!-- 如何加入-->
-    <section class="signup-section" id="joinus">
+
+    <section class="signup-section" id="signup">
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5">
                 <div class="col-md-10 col-lg-8 mx-auto text-center">
                     <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
-                    <h2 class="text-white mb-5">欢迎加入我们!</h2>
-                    <!-- * * * * * * * * * * * * * * *-->
-                    <!-- * * SB Forms Contact Form * *-->
-                    <!-- * * * * * * * * * * * * * * *-->
-                    <!-- This form is pre-integrated with SB Forms.-->
-                    <!-- To make this form functional, sign up at-->
-                    <!-- https://startbootstrap.com/solution/contact-forms-->
-                    <!-- to get an API token!-->
-                    <div class="row input-group-newsletter">QQ群:522291896<br>地址:pcraft.eu.org</div>
-                    <!-- <form>
-                        <div class="row input-group-newsletter">
-                            <div class="col"><input class="form-control" id="emailAddress" type="email" placeholder="Enter email address..." aria-label="Enter email address..." data-sb-validations="required,email" /></div>
-                            <div class="col-auto"><button class="btn btn-primary disabled" id="submitButton" type="submit">Notify Me!</button></div>
-                        </div>
-                    </form> -->
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Contact-->
-    <section class="contact-section bg-black">
-        <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5">
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <div class="card py-4 h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-map-marked-alt text-primary mb-2"></i>
-                            <h4 class="text-uppercase m-0">Address</h4>
-                            <hr class="my-4 mx-auto" />
-                            <div class="small text-black-50">4923 Market Street, Orlando FL</div>
-                        </div>
+                    <h2 class="text-white mb-5">立即加入 Pepper Craft</h2>
+                    
+                    <div class="text-white-50 mb-4">
+                        <h1 class="text-white">IP: pepper.ltd</h1>
+                        <p>（强制正版验证进服）</p>
                     </div>
-                </div>
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <div class="card py-4 h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-envelope text-primary mb-2"></i>
-                            <h4 class="text-uppercase m-0">Email</h4>
-                            <hr class="my-4 mx-auto" />
-                            <div class="small text-black-50"><a href="#!">hello@yourdomain.com</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <div class="card py-4 h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-mobile-alt text-primary mb-2"></i>
-                            <h4 class="text-uppercase m-0">Phone</h4>
-                            <hr class="my-4 mx-auto" />
-                            <div class="small text-black-50">+1 (555) 902-8832</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="social d-flex justify-content-center">
-                <a class="mx-2" href="#!"><i class="fab fa-twitter"></i></a>
-                <a class="mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
-                <a class="mx-2" href="#!"><i class="fab fa-github"></i></a>
-            </div>
-        </div>
-    </section>
-    <!-- Footer-->
-    <footer class="footer bg-black small text-center text-white-50">
-        <div class="container px-4 px-lg-5">Copyright &copy; Your Website 2022</div>
-    </footer>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
-    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-    <!-- * *                               SB Forms JS                               * *-->
-    <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-</body>
 
+                    <div class="row justify-content-center">
+                        <div class="col-md-4 mb-3">
+                            <div class="card bg-dark text-white h-100 border-secondary">
+                                <div class="card-body">
+                                    <h5 class="card-title">🎈 交流群</h5>
+                                    <p class="card-text">754966689</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card bg-dark text-white h-100 border-secondary">
+                                <div class="card-body">
+                                    <h5 class="card-title">🌍 官方文档</h5>
+                                    <p class="card-text">docs.pepper.ltd</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card bg-dark text-white h-100 border-secondary">
+                                <div class="card-body">
+                                    <h5 class="card-title">👔 腐竹QQ</h5>
+                                    <p class="card-text">2747789919</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="mt-5 text-white-50">
+                        🎉 服务器会不定期举行主题活动，发放限定奖励与特殊称号。<br>
+                        欢迎各位有意向但平时精力有限的玩家前来“养老”领奖。
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer bg-black small text-center text-white-50">
+        <div class="container px-4 px-lg-5">Copyright &copy; Pepper Craft 2023-2025</div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/scripts.js"></script>
+</body>
 </html>
