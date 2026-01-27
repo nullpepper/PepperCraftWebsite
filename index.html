@@ -109,22 +109,30 @@
                     </div>
                 </div>
             </div>
-
             <script type="text/javascript">
                 $(document).ready(function() {
                     $.ajax({
                         type: 'get',
-                        url: "https://mcping.me/api/java/pepper.ltd", // 更新为正确的IP
-                        success: function (body) {
-                            var online = body.online;
-                            $("#online").text(online);
+                        url: "https://uapis.cn/api/v1/game/minecraft/serverstatus?server=Pepper.ltd",
+                        dataType: 'json',
+                        success: function (data) {
+                            // data对应API返回的JSON对象
+                            if (data.online) {
+                                // 如果服务器在线，显示 players 字段
+                                $("#online").text(data.players);
+                            } else {
+                                // 如果 online 为 false
+                                $("#online").text("离线");
+                            }
                         },
                         error: function() {
-                            $("#online").text("离线/维护中");
+                            // 如果请求本身失败（如网络问题）
+                            $("#online").text("维护中");
                         }
                     });
                 });
             </script>
+
 
             <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
                 <div class="col-lg-6"><img class="img-fluid" src="assets/img/Image-1.jpg" alt="Players" /></div>
@@ -134,10 +142,10 @@
                             <div class="project-text w-100 my-auto text-center text-lg-left">
                                 <h4 class="text-white">实时状态</h4>
                                 <p class="mb-0 text-white-50">
-                                    当前在线人数：<span id="online" style="color:#64a19d; font-weight:bold;">加载中...</span> 人
-                                    <br><br>
-                                    没有臃肿的虚拟货币，没有复杂的地皮系统。<br>
-                                    只有最纯粹的方块世界。
+                                   当前在线人数：<span id="online" style="color:#64a19d; font-weight:bold;">正在获取...</span> 人
+                                   <br><br>
+                                   没有臃肿的虚拟货币，没有复杂的地皮系统。<br>
+                                   只有最纯粹的方块世界。
                                 </p>
                                 <hr class="d-none d-lg-block mb-0 ms-0" />
                             </div>
