@@ -35,4 +35,31 @@ describe('PepperCraft 网站核心行为', () => {
     expect(text).toContain('2023-02-20')
     expect(text).toContain('3 年')
   })
+
+  it('单页面结构：包含全部核心区块锚点', () => {
+    const wrapper = mount(HomeView, {
+      global: {
+        plugins: [createPinia()],
+        stubs: { RouterView: true },
+      },
+    })
+    const ids = wrapper.findAll('section[id]').map((s) => s.attributes('id'))
+    for (const id of ['top', 'status', 'about', 'features', 'tech', 'join', 'faq']) {
+      expect(ids).toContain(id)
+    }
+  })
+
+  it('单页面结构：特色与 FAQ 区块内容聚合在首页', () => {
+    const wrapper = mount(HomeView, {
+      global: {
+        plugins: [createPinia()],
+        stubs: { RouterView: true },
+      },
+    })
+    const text = wrapper.text()
+    expect(text).toContain('红石自由')
+    expect(text).toContain('拒绝冗余')
+    expect(text).toContain('技术保障')
+    expect(text).toContain('常见问题')
+  })
 })

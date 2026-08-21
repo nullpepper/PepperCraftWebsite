@@ -54,6 +54,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* 锚点区块：滚动定位时预留导航栏高度 */
+section[id] {
+  scroll-margin-top: calc(var(--nav-h) + 8px);
+}
+
 body {
   font-family: var(--font-body);
   background: var(--bg-0);

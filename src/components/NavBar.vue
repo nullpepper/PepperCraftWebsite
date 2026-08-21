@@ -1,25 +1,30 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-
-const router = useRouter()
-const route = useRoute()
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const links = [
-  { to: '/', label: '首页', exact: true },
-  { to: '/about', label: '关于' },
-  { to: '/features', label: '特色玩法' },
-  { to: '/join', label: '加入我们' },
+  { id: 'top', label: '首页' },
+  { id: 'about', label: '关于' },
+  { id: 'features', label: '特色玩法' },
+  { id: 'join', label: '加入我们' },
 ]
 
 const scrolled = ref(false)
 const open = ref(false)
-
-const isActive = (l: { to: string; exact?: boolean }) =>
-  l.exact ? route.path === l.to : route.path.startsWith(l.to)
+const active = ref('top')
 
 function onScroll() {
   scrolled.value = window.scrollY > 24
+  // 高亮当前区块
+  const pos = window.scrollY + 120
+  let current = 'top'
+  for (const l of [...links].reverse()) {
+    const el = document.getElementById(l.id)
+    if (el && el.offsetTop <= pos) {
+      current = l.id
+      break
+    }
+  }
+  active.value = current
 }
 
 onMounted(() => {
@@ -28,16 +33,21 @@ onMounted(() => {
 })
 onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 
-function go(to: string) {
+function go(id: string) {
   open.value = false
-  router.push(to)
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  } else if (id === 'top') {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 }
 </script>
 
 <template>
   <header class="nav" :class="{ 'nav-scrolled': scrolled }">
     <div class="container nav-inner">
-      <button class="nav-brand" @click="go('/')">
+      <button class="nav-brand" @click="go('top')">
         <span class="brand-block">⛏</span>
         <span class="brand-text">Pepper Craft</span>
       </button>
@@ -45,13 +55,13 @@ function go(to: string) {
       <nav class="nav-links" :class="{ open }">
         <a
           v-for="l in links"
-          :key="l.to"
-          :class="{ active: isActive(l) }"
-          @click.prevent="go(l.to)"
+          :key="l.id"
+          :class="{ active: active === l.id }"
+          @click.prevent="go(l.id)"
         >
           {{ l.label }}
         </a>
-        <a class="nav-join-btn" @click.prevent="go('/join')">立即加入</a>
+        <a class="nav-join-btn" @click.prevent="go('join')">立即加入</a>
       </nav>
 
       <button class="nav-toggle" :class="{ open }" aria-label="菜单" @click="open = !open">
@@ -120,7 +130,7 @@ function go(to: string) {
   gap: 4px;
 }
 .nav-links a {
-  padding: 8px 13px;
+  padding: 8px 16px;
   border-radius: 8px;
   color: var(--text-2);
   font-size: 14.5px;
