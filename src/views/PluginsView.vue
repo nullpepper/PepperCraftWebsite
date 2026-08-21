@@ -101,6 +101,7 @@ import Reveal from '../components/Reveal.vue'
   justify-content: space-between;
   gap: 10px;
   margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 .plugin-head h3 {
   font-size: 18px;

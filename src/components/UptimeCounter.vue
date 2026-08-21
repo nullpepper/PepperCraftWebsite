@@ -95,4 +95,23 @@ onBeforeUnmount(() => {
   padding: 5px 9px;
   min-width: 52px;
 }
+
+@media (max-width: 520px) {
+  .uptime {
+    gap: 6px;
+  }
+  .unit {
+    padding: 6px 8px;
+    min-width: 46px;
+  }
+  .num {
+    font-size: 19px;
+  }
+  .sep {
+    font-size: 16px;
+  }
+  .compact .unit {
+    min-width: 42px;
+  }
+}
 </style>
