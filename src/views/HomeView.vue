@@ -473,10 +473,18 @@ onBeforeUnmount(() => {
 /* ============================================================
    屏2 运行状态 / 屏3 关于：左右分栏 + 右侧图片满幅出血
    ============================================================ */
-.split-screen {
+#fullpage .split-screen {
   position: relative;
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
   align-items: stretch;
+}
+/* fullpage 将 section 内容包裹进 .fp-overflow；这里恢复左右分栏布局 */
+#fullpage .split-screen :deep(.fp-overflow) {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch;
+  width: 100%;
 }
 .split-copy {
   position: relative;
@@ -1037,8 +1045,10 @@ a.contact-card:hover {
     font-size: 84px;
     right: 20px;
   }
-  .split-screen {
-    flex-direction: column-reverse;
+  /* fullpage 运行时把 section 内容包进 .fp-overflow，
+     必须翻转它而不是 .split-screen（section 本身只包着 fp-overflow） */
+  #fullpage .split-screen :deep(.fp-overflow) {
+    flex-direction: column-reverse !important;
   }
   .split-copy {
     width: 100%;
@@ -1111,7 +1121,9 @@ a.contact-card:hover {
     padding: calc(var(--nav-h) + 48px) 20px 130px;
   }
   .hero-title {
-    font-size: clamp(52px, 15vw, 76px);
+    /* 390px 下 15vw=58.5px 会溢出边界，收紧到视口 11vw */
+    font-size: clamp(40px, 11vw, 64px);
+    max-width: 100%;
   }
   .hero-facts {
     flex-wrap: wrap;
@@ -1121,6 +1133,15 @@ a.contact-card:hover {
     flex: 1 1 50%;
     padding: 10px 16px;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  /* 关键数据不换行：避免「Java + 基岩」竖排成两行 */
+  .fact strong {
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .fact span {
+    font-size: 11px;
+    letter-spacing: 0.04em;
   }
   .fact:nth-child(odd) {
     border-left: none;
@@ -1133,7 +1154,8 @@ a.contact-card:hover {
   }
   .features-screen,
   .join-screen {
-    padding: 28px 20px 30px;
+    /* 保留 nav-h：窄屏 fallback 滚动时标题不被固定导航裁切 */
+    padding: calc(var(--nav-h) + 20px) 20px 30px;
   }
   .tag-grid {
     grid-template-columns: 1fr;
@@ -1151,7 +1173,7 @@ a.contact-card:hover {
     padding: 14px 16px;
   }
   .faq-layout {
-    padding: 28px 20px 34px;
+    padding: calc(var(--nav-h) + 20px) 20px 34px;
   }
   .faq-q {
     padding: 13px 14px;

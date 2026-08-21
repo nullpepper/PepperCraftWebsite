@@ -57,6 +57,21 @@ export const useFullPageStore = defineStore('fullpage', {
 
     /** 跳转到指定屏（index 从 0 开始） */
     goTo(index: number) {
+      // fullpage responsiveWidth/Height 会退化普通滚动（fp-responsive 类异步挂载），
+      // 此时 moveTo 落点与内容实际高度不符，改用原生 scrollIntoView
+      // （配合 html 的 scroll-padding-top 避开固定导航）。
+      const responsive =
+        typeof document !== 'undefined' &&
+        (!!document.querySelector('#fullpage.fp-responsive, .fullpage-wrapper.fp-responsive') ||
+          (typeof window !== 'undefined' &&
+            typeof window.matchMedia === 'function' &&
+            window.matchMedia('(max-width: 768px)').matches) ||
+          (typeof window !== 'undefined' && window.innerHeight <= 620))
+      if (responsive) {
+        const section = document.querySelectorAll<HTMLElement>('.fp-section')[index]
+        section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        return
+      }
       api?.moveTo(index + 1) // fullpage.js 的 section 索引从 1 开始
     },
 

@@ -75,6 +75,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* 窄屏（fullpage responsive 模式）点击导航跳转时，让目标屏内容避开固定导航 */
+  scroll-padding-top: var(--nav-h);
 }
 
 /* 全屏分页由 fullpage.js 接管滚动，各屏不使用 DOM 锚点 */
