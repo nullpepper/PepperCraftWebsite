@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useFullPageStore } from '../stores/fullpage'
+
+const fpStore = useFullPageStore()
 
 const links = [
-  { id: 'top', label: '首页' },
+  { id: 'hero', label: '首页' },
   { id: 'about', label: '关于' },
   { id: 'features', label: '特色玩法' },
   { id: 'join', label: '加入我们' },
@@ -10,21 +13,11 @@ const links = [
 
 const scrolled = ref(false)
 const open = ref(false)
-const active = ref('top')
+
+const active = computed(() => fpStore.currentScreen.id)
 
 function onScroll() {
   scrolled.value = window.scrollY > 24
-  // 高亮当前区块
-  const pos = window.scrollY + 120
-  let current = 'top'
-  for (const l of [...links].reverse()) {
-    const el = document.getElementById(l.id)
-    if (el && el.offsetTop <= pos) {
-      current = l.id
-      break
-    }
-  }
-  active.value = current
 }
 
 onMounted(() => {
@@ -35,19 +28,14 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 
 function go(id: string) {
   open.value = false
-  const el = document.getElementById(id)
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  } else if (id === 'top') {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+  fpStore.goToId(id)
 }
 </script>
 
 <template>
   <header class="nav" :class="{ 'nav-scrolled': scrolled }">
     <div class="container nav-inner">
-      <button class="nav-brand" @click="go('top')">
+      <button class="nav-brand" @click="go('hero')">
         <span class="brand-block">⛏</span>
         <span class="brand-text">Pepper Craft</span>
       </button>
