@@ -9,7 +9,8 @@ export const SITE = {
   ip: 'pepper.ltd',
   ipPort: 'pepper.ltd',
   qqGroup: '754966689',
-  qqGroupUrl: 'https://qm.qq.com/q/3vQk9L0R7Z',
+  /** QQ 群主页（群号搜索入口） */
+  qqGroupUrl: 'https://qun.qq.com/',
   ownerQq: '2747789919',
   docsUrl: 'https://docs.pepper.ltd',
   docsDomain: 'docs.pepper.ltd',
