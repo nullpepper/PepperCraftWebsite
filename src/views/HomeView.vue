@@ -486,6 +486,23 @@ onBeforeUnmount(() => {
   align-items: stretch;
   width: 100%;
 }
+/* 屏3 关于页：图片在左、文案在右，与屏2 形成左右交替节奏（仅桌面；<=900 已翻转为上下堆叠） */
+@media (min-width: 901px) {
+  #fullpage .about-screen.alt :deep(.fp-overflow) {
+    flex-direction: row-reverse !important;
+  }
+  .about-screen.alt .split-copy {
+    margin-left: auto;
+    margin-right: max(calc((100% - var(--container)) / 2), 24px);
+    padding: calc(var(--nav-h) + 36px) 24px 40px 40px;
+  }
+  /* 暗角渐变跟着文案换边：从左侧压暗改为右侧压暗 */
+  .about-screen.alt .media-scrim {
+    background:
+      linear-gradient(270deg, var(--bg-0) 0%, rgba(13, 16, 16, 0.25) 22%, transparent 45%),
+      linear-gradient(to top, rgba(8, 11, 10, 0.85), transparent 42%);
+  }
+}
 .split-copy {
   position: relative;
   z-index: 1;
