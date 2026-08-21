@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CORE_FEATURES, EXTRA_FEATURES } from '../data/features'
+import { CORE_FEATURES } from '../data/features'
 import Reveal from '../components/Reveal.vue'
 </script>
 
@@ -8,20 +8,12 @@ import Reveal from '../components/Reveal.vue'
     <section class="page-hero">
       <div class="container">
         <h1 class="page-title">特色玩法</h1>
-        <p class="page-sub">优化原版 · 纯净生存 · 技术保障 —— 三种核心特色，六种进阶玩法</p>
+        <p class="page-sub">优化原版 · 纯净生存 · 技术保障</p>
       </div>
     </section>
 
-    <!-- 核心特色：图文交错 -->
     <section class="section">
       <div class="container">
-        <Reveal>
-          <div class="section-head">
-            <span class="section-eyebrow">核心特色</span>
-            <h2 class="section-title">⭐ 服务器特色</h2>
-          </div>
-        </Reveal>
-
         <div v-for="(f, idx) in CORE_FEATURES" :key="f.title">
           <Reveal :delay="idx * 60">
             <div class="core-row" :class="{ reverse: idx % 2 === 1 }">
@@ -45,25 +37,26 @@ import Reveal from '../components/Reveal.vue'
       </div>
     </section>
 
-    <!-- 进阶玩法 -->
+    <!-- 更多玩法 -->
     <section class="section section-alt">
       <div class="container">
         <Reveal>
           <div class="section-head">
-            <span class="section-eyebrow">进阶玩法</span>
+            <span class="section-eyebrow">更多玩法</span>
             <h2 class="section-title">不止于生存</h2>
-            <p class="section-sub">联盟、经济、机器人联动……在原版之上，一切皆有可能。</p>
           </div>
         </Reveal>
         <div class="extra-grid">
-          <Reveal v-for="(f, i) in EXTRA_FEATURES" :key="f.title" :delay="(i % 3) * 100">
+          <Reveal v-for="(f, i) in [
+            { icon: '🏰', title: '联盟与领地', desc: '区块级领地保护、联盟农场、城镇金库，服务器现有 25 个联盟。' },
+            { icon: '💎', title: '钻石经济', desc: '以原版钻石为硬通货，/bank 存取，没有膨胀的虚拟币。' },
+            { icon: '🤖', title: 'QQ 机器人联动', desc: '自研 PepperBot 家族：聊天同步、指令转发、自动回复。' },
+            { icon: '🌍', title: '跨版本支持', desc: 'Java 版全版本 + 基岩版玩家均可进入。' },
+          ]" :key="f.title" :delay="(i % 2) * 100">
             <div class="card extra-card">
               <span class="extra-icon">{{ f.icon }}</span>
               <h3>{{ f.title }}</h3>
               <p>{{ f.desc }}</p>
-              <ul>
-                <li v-for="p in f.points" :key="p">{{ p }}</li>
-              </ul>
             </div>
           </Reveal>
         </div>
@@ -163,39 +156,22 @@ import Reveal from '../components/Reveal.vue'
 
 .extra-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 860px;
+  margin: 0 auto;
 }
 .extra-card h3 {
-  font-size: 18px;
-  margin-bottom: 10px;
+  font-size: 17px;
+  margin-bottom: 8px;
 }
 .extra-card p {
   color: var(--text-2);
   font-size: 14px;
-  margin-bottom: 14px;
   line-height: 1.8;
 }
-.extra-card ul {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.extra-card li {
-  font-size: 13.5px;
-  color: var(--text-2);
-  padding-left: 20px;
-  position: relative;
-}
-.extra-card li::before {
-  content: '▸';
-  position: absolute;
-  left: 0;
-  color: var(--accent);
-}
 .extra-icon {
-  font-size: 30px;
+  font-size: 28px;
   display: block;
   margin-bottom: 10px;
 }
@@ -207,9 +183,6 @@ import Reveal from '../components/Reveal.vue'
   }
   .reverse .core-text {
     order: 0;
-  }
-  .extra-grid {
-    grid-template-columns: 1fr 1fr;
   }
 }
 @media (max-width: 600px) {
