@@ -303,6 +303,8 @@ table.data-table {
   opacity: 0;
   transform: translateY(26px);
   transition: opacity 0.7s ease, transform 0.7s ease;
+  /* 允许作为 grid/flex 子项时收缩，避免内容撑破容器 */
+  min-width: 0;
 }
 .reveal.visible {
   opacity: 1;
