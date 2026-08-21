@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import { SITE } from '../data/site'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
 const year = new Date().getFullYear()
 
+function go(id: string) {
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  } else if (id === 'top') {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+}
+
 const navs = [
-  { to: '/about', label: '关于服务器' },
-  { to: '/features', label: '特色玩法' },
-  { to: '/join', label: '加入我们' },
+  { id: 'about', label: '关于' },
+  { id: 'features', label: '特色玩法' },
+  { id: 'join', label: '加入我们' },
 ]
 </script>
 
@@ -27,7 +34,8 @@ const navs = [
         <div class="footer-links">
           <div>
             <h5>导航</h5>
-            <a v-for="n in navs" :key="n.to" @click.prevent="router.push(n.to)">{{ n.label }}</a>
+            <a v-for="n in navs" :key="n.id" @click.prevent="go(n.id)">{{ n.label }}</a>
+            <a @click.prevent="go('top')">返回顶部</a>
           </div>
           <div>
             <h5>联系</h5>
