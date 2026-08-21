@@ -1,0 +1,28 @@
+{
+  "name": "peppercraft-website",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Pepper Craft - 忠于原版的高版本生存 · 官网（Vue 3 重构版）",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "data:extract": "python3 .build/extract-data.py"
+  },
+  "dependencies": {
+    "pinia": "^3.0.3",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitest/coverage-v8": "^4.1.11",
+    "@vue/test-utils": "^2.4.11",
+    "jsdom": "^30.0.1",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7",
+    "vitest": "^4.1.11",
+    "vue-tsc": "^2.2.0"
+  }
+}
