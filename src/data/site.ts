@@ -1,6 +1,6 @@
 /** 站点与服务器基础信息（继承原网站全部关键信息） */
 export const SITE = {
-  name: 'Pepper Craft',
+  name: 'PepperCraft',
   slogan: '基于原版，忠于原版',
   subSlogan: 'PVP、生存、生电融合的高质量社区',
   tagline: '高版本纯净生存公益服',
@@ -28,23 +28,4 @@ export const SITE = {
   motd: 'PepperMC',
   auth: '强制正版验证',
   eula: '完全遵守官方 EULA',
-  /** 数据快照抓取时间（从服务器容器提取） */
-  snapshotTime: '2026-08-21',
-} as const
-
-/** 服务器技术档案（来自容器 server.properties / 插件清单） */
-export const SERVER_PROFILE = {
-  core: 'Purpur 26.1.2（MC 1.21+ 高版本）',
-  difficulty: '困难',
-  gamemode: '生存',
-  simulationDistance: 10,
-  viewDistance: 10,
-  maxPlayers: 1000,
-  redstone: '高频红石无限制',
-  backup: '本地 + 异地双重备份',
-  anticheat: '付费级混合反作弊（Matrix）',
-  worldgen: 'TerraformGenerator 增强地形',
-  crossVersion: 'ViaVersion / ViaBackwards 跨版本支持',
-  bedrock: 'Floodgate + Hurricane 基岩版支持',
-  proxy: 'Velocity 代理 + 强制正版验证',
 } as const

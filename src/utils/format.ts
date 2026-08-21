@@ -18,24 +18,3 @@ export function formatUptime(now: Date = new Date()): Uptime {
     seconds: Math.floor((diff % 60000) / 1000),
   }
 }
-
-/** 千分位格式化数字 */
-export function formatNumber(n: number, fractionDigits = 0): string {
-  return n.toLocaleString('zh-CN', {
-    maximumFractionDigits: fractionDigits,
-  })
-}
-
-/** 钻石余额格式化（千分位，保留最多 2 位小数） */
-export function formatBalance(n: number): string {
-  return n.toLocaleString('zh-CN', { maximumFractionDigits: 2 })
-}
-
-/** 格式化日期为 YYYY-MM-DD */
-export function formatDate(d: Date | string): string {
-  const date = typeof d === 'string' ? new Date(d) : d
-  const y = date.getFullYear()
-  const m = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
-}

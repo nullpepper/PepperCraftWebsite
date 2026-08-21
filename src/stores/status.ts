@@ -43,7 +43,9 @@ export const useStatusStore = defineStore('status', {
         if (data && data.online === true) {
           this.status = 'online'
           this.players = typeof data.players === 'number' ? data.players : parseInt(data.players || '0', 10)
-          this.version = data.version?.name ?? null
+          this.version =
+            data.version?.name ?? data.version?.name_clean ?? data.version ?? data.protocol?.name ?? null
+          this.motd = normalizeMotd(data.motd ?? data.description)
           this.lastCheck = new Date()
           return
         }
@@ -64,8 +66,8 @@ export const useStatusStore = defineStore('status', {
             this.status = 'online'
             this.players = d2.players?.online ?? 0
             this.maxPlayers = d2.players?.max ?? 1000
-            this.version = d2.version?.name ?? null
-            this.motd = Array.isArray(d2.motd?.clean) ? d2.motd.clean.join(' ') : d2.motd?.clean
+            this.version = d2.version?.name ?? d2.version?.name_clean ?? null
+            this.motd = normalizeMotd(d2.motd)
             this.lastCheck = new Date()
             return
           }
@@ -85,3 +87,20 @@ export const useStatusStore = defineStore('status', {
     },
   },
 })
+
+/**
+ * 归一化 MOTD：兼容字符串、字符串数组，以及
+ * { clean } / { raw } / { text } 形式的对象（两个 API 都可能返回其中任意一种）
+ */
+function normalizeMotd(value: unknown): string | null {
+  if (Array.isArray(value)) return value.filter(Boolean).join(' ').replace(/\s+/g, ' ').trim() || null
+  if (typeof value === 'string') return value.replace(/\s+/g, ' ').trim() || null
+  if (value && typeof value === 'object') {
+    const obj = value as Record<string, unknown>
+    for (const key of ['clean', 'raw', 'text'] as const) {
+      const resolved = normalizeMotd(obj[key])
+      if (resolved) return resolved
+    }
+  }
+  return null
+}

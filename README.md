@@ -3,14 +3,12 @@
 > PepperCraft Minecraft Survial Server · 忠于原版的高版本生存
 
 基于 **Vue 3 + Vite + TypeScript + Vue Router + Pinia** 的现代化官网重构，
-完整继承原网站全部信息，并从服务器本体（Docker 容器）提取真实数据丰富内容。
+完整继承原网站全部信息。
 
-## ✨ 功能
-
-## 结构
+## ✨ 结构
 
 全屏分页式布局（一屏一节，参考 et001.com 首页）：基于 fullpage.js（GPLv3 非商业使用），
-滚轮 / 触摸 / 键盘翻页，右侧指示点与顶部导航跳屏：
+滚轮 / 触摸 / 键盘翻页，顶部导航跳屏：
 
 | 屏 | 内容 |
 |----|------|
@@ -20,6 +18,10 @@
 | 4 特色玩法 | 三大核心特色 + 更多玩法标签 |
 | 5 加入我们 | IP、联系方式（QQ群 / 文档 / 腐竹 QQ）、活动 |
 | 6 FAQ | 常见问题手风琴 |
+| 7 页尾 | 站内导航、联系方式、版权 |
+
+站内跳转统一走 `stores/fullpage.ts`：各屏没有 DOM 锚点 id，导航栏、Hero 按钮、
+页脚链接与返回顶部都调用 `goToId()` → `fullpage.moveTo()`。
 
 ## 🆕 新功能（原站没有的）
 
@@ -27,7 +29,7 @@
 - ⏳ **运行时长实时倒计时**：精确到秒（开服 2023-02-20）
 - 📋 **一键复制 IP**
 - 🤔 **FAQ 手风琴**
-- 📱 响应式设计（移动端汉堡菜单）、暗色 Minecraft 主题、滚动渐入动画、返回顶部
+- 📱 响应式设计（移动端汉堡菜单）、暗色 Minecraft 主题、返回顶部
 
 ## 🚀 开发
 
@@ -47,25 +49,19 @@ npm run preview    # 预览构建产物
 - **Nginx / Caddy**：将站点根目录指向 dist/ 即可
 - 原 CNAME `web.pcraft.eu.org` 保留在仓库，可继续用于 GitHub Pages 自定义域名
 
-## 🔄 数据更新
-
-服务器数据（玩家排行 / 城镇 / 财富榜）为**静态快照**，存放于 `src/data/*.json`。
-需要刷新时在服务器本机执行：
-
-```bash
-npm run data:extract
-```
-
-脚本从 `/opt/docker/minecraft/mc/data` 与 MariaDB 容器重新提取并覆盖快照数据。
-
 ## 🧪 测试
 
 ```bash
-npm test
+npm test          # 单次运行
+npm run test:watch
+npm run coverage
 ```
 
 - 运行时长计算（开服时间边界）
 - 首页关键信息渲染（IP / QQ 群 / 腐竹 QQ / 文档域名 / 存档承诺）
+- 全屏分页结构与 `SCREENS` 定义保持一致
+- 站内跳屏：页脚导航与返回顶部（回归测试）
+- 状态 API：主/备切换、MOTD 解析、双失败降级为「维护中」
 
 ## 📄 技术栈
 

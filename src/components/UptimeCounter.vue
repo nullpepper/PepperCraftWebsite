@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { formatUptime } from '../utils/format'
 
 /** 自开服以来的运行时长实时倒计时 */
-const props = withDefaults(defineProps<{ compact?: boolean }>(), { compact: false })
-
 const d = ref(0)
 const h = ref(0)
 const m = ref(0)
@@ -12,12 +11,11 @@ const s = ref(0)
 let timer: number | null = null
 
 function tick() {
-  const target = new Date('2023-02-20T00:00:00+08:00')
-  const diff = Math.max(0, Date.now() - target.getTime())
-  d.value = Math.floor(diff / 86400000)
-  h.value = Math.floor((diff % 86400000) / 3600000)
-  m.value = Math.floor((diff % 3600000) / 60000)
-  s.value = Math.floor((diff % 60000) / 1000)
+  const { days, hours, minutes, seconds } = formatUptime()
+  d.value = days
+  h.value = hours
+  m.value = minutes
+  s.value = seconds
 }
 
 onMounted(() => {
@@ -30,7 +28,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="uptime" :class="{ compact }">
+  <div class="uptime">
     <div class="unit">
       <span class="num">{{ String(d).padStart(2, '0') }}</span>
       <span class="label">天</span>
@@ -54,64 +52,64 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+/* 叠在「运行状态」屏的红石配图上，因此用半透明玻璃面而非实心暗块 */
 .uptime {
   display: inline-flex;
   align-items: stretch;
-  gap: 10px;
+  gap: 8px;
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 .unit {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: var(--bg-0);
-  border: 1px solid var(--border);
+  gap: 2px;
+  background: rgba(10, 14, 12, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 10px;
-  padding: 8px 12px;
-  min-width: 62px;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+  padding: 10px 14px;
+  min-width: 74px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 12px 30px -10px rgba(0, 0, 0, 0.8);
 }
 .num {
-  font-size: 26px;
+  font-size: clamp(30px, 3.4vw, 44px);
   font-weight: 700;
-  color: var(--accent);
-  line-height: 1.2;
+  color: var(--text-1);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
 }
 .label {
   font-size: 11px;
   color: var(--text-3);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
+  letter-spacing: 0.14em;
 }
 .sep {
   align-self: center;
-  font-size: 22px;
+  font-size: 24px;
   color: var(--text-3);
   font-weight: 700;
-}
-.compact .num {
-  font-size: 20px;
-}
-.compact .unit {
-  padding: 5px 9px;
-  min-width: 52px;
+  opacity: 0.5;
 }
 
 @media (max-width: 520px) {
   .uptime {
-    gap: 6px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
   }
   .unit {
-    padding: 6px 8px;
-    min-width: 46px;
+    padding: 8px 4px;
+    min-width: 0;
+    border-radius: 6px;
   }
   .num {
-    font-size: 19px;
+    font-size: 22px;
   }
-  .sep {
-    font-size: 16px;
-  }
-  .compact .unit {
-    min-width: 42px;
-  }
+  .sep { display: none; }
 }
 </style>

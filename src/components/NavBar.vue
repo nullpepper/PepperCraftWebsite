@@ -6,18 +6,22 @@ const fpStore = useFullPageStore()
 
 const links = [
   { id: 'hero', label: '首页' },
+  { id: 'status', label: '运行状态' },
   { id: 'about', label: '关于' },
   { id: 'features', label: '特色玩法' },
-  { id: 'join', label: '加入我们' },
+  { id: 'faq', label: 'FAQ' },
 ]
 
-const scrolled = ref(false)
+/** 窄屏下 fullpage 退化为普通滚动，此时才有真实的 scrollY */
+const pageScrolled = ref(false)
 const open = ref(false)
 
 const active = computed(() => fpStore.currentScreen.id)
+/** fullpage 用 transform 翻页，scrollY 恒为 0，因此还要看当前屏 */
+const scrolled = computed(() => pageScrolled.value || fpStore.hasLeftFirstScreen)
 
 function onScroll() {
-  scrolled.value = window.scrollY > 24
+  pageScrolled.value = window.scrollY > 24
 }
 
 onMounted(() => {
@@ -36,8 +40,7 @@ function go(id: string) {
   <header class="nav" :class="{ 'nav-scrolled': scrolled }">
     <div class="container nav-inner">
       <button class="nav-brand" @click="go('hero')">
-        <span class="brand-block">⛏</span>
-        <span class="brand-text">Pepper Craft</span>
+        <span class="brand-text"><span class="brand-pepper">Pepper</span><span class="brand-craft">Craft</span></span>
       </button>
 
       <nav class="nav-links" :class="{ open }">
@@ -69,14 +72,14 @@ function go(id: string) {
   height: var(--nav-h);
   display: flex;
   align-items: center;
-  background: rgba(7, 10, 7, 0.55);
+  background: rgba(16, 19, 19, 0.76);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid transparent;
   transition: all 0.3s;
 }
 .nav-scrolled {
-  background: rgba(9, 13, 9, 0.92);
+  background: rgba(16, 19, 19, 0.96);
   border-bottom-color: var(--border);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
 }
@@ -89,28 +92,17 @@ function go(id: string) {
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0;
   background: none;
   border: none;
   cursor: pointer;
-  font-family: var(--font-head);
-}
-.brand-block {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-  color: #06130a;
-  font-size: 18px;
-  border-radius: 9px;
-  box-shadow: 0 4px 14px rgba(58, 170, 82, 0.4);
+  font-family: var(--font-sans);
 }
 .brand-text {
   font-size: 19px;
   font-weight: 800;
   color: var(--text-1);
-  letter-spacing: 0.03em;
+  letter-spacing: -0.01em;
 }
 .nav-links {
   display: flex;
@@ -119,7 +111,7 @@ function go(id: string) {
 }
 .nav-links a {
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 3px;
   color: var(--text-2);
   font-size: 14.5px;
   font-weight: 600;
@@ -137,15 +129,16 @@ function go(id: string) {
 .nav-join-btn {
   margin-left: 10px;
   padding: 9px 18px !important;
-  background: linear-gradient(135deg, #4cbb5e, #2e9b43) !important;
-  color: #06130a !important;
-  border-radius: 9px !important;
-  font-family: var(--font-head);
+  /* 与 .btn-primary 同一条绿色渐变，避免导航出现第二种绿 */
+  background: linear-gradient(135deg, #9ad86e, #63a647) !important;
+  color: #08150b !important;
+  border-radius: 3px !important;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 .nav-join-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(58, 170, 82, 0.4);
+  box-shadow: 0 6px 18px rgba(99, 166, 71, 0.4);
 }
 .nav-toggle {
   display: none;
@@ -198,5 +191,13 @@ function go(id: string) {
     margin: 8px 0 0;
     text-align: center;
   }
+}
+.brand-pepper { color: var(--accent); }
+.brand-craft { color: var(--blue); }
+@media (max-width: 600px) {
+  .nav-inner { padding: 0 16px; }
+  .brand-text { font-size: 17px; }
+  .nav-links { padding: 10px 16px 16px; }
+  .nav-links a { padding: 11px 12px; }
 }
 </style>

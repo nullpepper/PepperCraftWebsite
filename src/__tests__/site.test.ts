@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { formatUptime } from '../utils/format'
+import { SCREENS } from '../stores/fullpage'
 import HomeView from '../views/HomeView.vue'
 
 // mock fullpage.js：jsdom 中不需要真实滚动分页，只需验证结构
@@ -41,7 +42,7 @@ describe('PepperCraft 网站核心行为', () => {
       },
     })
     const text = wrapper.text()
-    expect(text).toContain('Pepper Craft')
+    expect(text).toContain('PepperCraft')
     expect(text).toContain('pepper.ltd')
     expect(text).toContain('754966689')
     expect(text).toContain('2747789919')
@@ -50,15 +51,15 @@ describe('PepperCraft 网站核心行为', () => {
     expect(text).toContain('3 年')
   })
 
-  it('全屏分页结构：包含 6 个屏幕区块', () => {
+  it('全屏分页结构：DOM 屏数与 SCREENS 定义一致', () => {
     const wrapper = mount(HomeView, {
       global: {
         plugins: [createPinia()],
         stubs: { RouterView: true },
       },
     })
-    const screens = wrapper.findAll('.fp-screen')
-    expect(screens.length).toBe(6)
+    // 断言绑定 SCREENS，避免增删屏后测试与导航指示点脱节
+    expect(wrapper.findAll('.fp-screen').length).toBe(SCREENS.length)
     // 屏内容关键词抽查
     const text = wrapper.text()
     expect(text).toContain('红石自由')
@@ -68,10 +69,36 @@ describe('PepperCraft 网站核心行为', () => {
     expect(text).toContain('立即加入')
   })
 
-  it('fullpage 初始化时注入 API 到 store', async () => {
+  it('fullpage store 初始状态定位在首屏', async () => {
     const { useFullPageStore } = await import('../stores/fullpage')
     const store = useFullPageStore()
-    expect(store.screens.length).toBe(6)
+    expect(store.screens).toEqual(SCREENS)
     expect(store.currentScreen.id).toBe('hero')
+    expect(store.hasLeftFirstScreen).toBe(false)
+  })
+
+  it('goToId 通过注入的 fullpage 实例跳屏（section 索引从 1 开始）', async () => {
+    const { useFullPageStore } = await import('../stores/fullpage')
+    const store = useFullPageStore()
+    const moveTo = vi.fn()
+    store.setApi({ moveTo })
+
+    store.goToId('join')
+    expect(moveTo).toHaveBeenCalledWith(SCREENS.findIndex((s) => s.id === 'join') + 1)
+
+    // 未知 id 不应触发跳转
+    moveTo.mockClear()
+    store.goToId('nope')
+    expect(moveTo).not.toHaveBeenCalled()
+
+    store.setApi(null)
+  })
+
+  it('离开首屏后 hasLeftFirstScreen 置真（导航栏/返回顶部据此显示）', async () => {
+    const { useFullPageStore } = await import('../stores/fullpage')
+    const store = useFullPageStore()
+    store.setCurrent(2)
+    expect(store.hasLeftFirstScreen).toBe(true)
+    expect(store.currentScreen.id).toBe('about')
   })
 })

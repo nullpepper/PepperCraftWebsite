@@ -12,6 +12,8 @@ declare module 'fullpage.js' {
     lockAnchors?: boolean
     anchors?: string[]
     afterLoad?: (origin: any, destination: any) => void
+    /** 翻页动画开始时触发（afterLoad 在动画结束时才触发） */
+    onLeave?: (origin: any, destination: any, direction: any) => void
     afterRender?: () => void
     [key: string]: any
   }

@@ -1,47 +1,70 @@
 /* ============================================================
    Pepper Craft · 设计系统
-   暗色 Minecraft 主题：深林绿 + 草方块绿 + 琥珀金
+   暗色 Minecraft 主题
    ============================================================ */
 
 :root {
-  /* 色板 */
-  --bg-0: #070a07;
-  --bg-1: #0c110c;
-  --bg-2: #111811;
-  --bg-3: #162016;
-  --card: #131b13;
-  --card-hover: #1a2519;
-  --border: #243324;
-  --border-soft: #1c281c;
+  /* ---------- 色板 ---------- */
+  --bg-0: #0d1010;
+  --bg-1: #141817;
+  --bg-2: #1b211f;
+  --bg-3: #26302d;
+  --card: #202825;
+  --card-hover: #29332f;
+  --border: #3a463f;
+  --border-soft: #2b3531;
 
-  --accent: #58c169;
-  --accent-strong: #3fb950;
-  --accent-dim: rgba(88, 193, 105, 0.12);
-  --accent-glow: rgba(88, 193, 105, 0.35);
+  /* 强调色职责（硬规则，勿混用）：
+     --accent  绿 = 主行动。主按钮、Pepper 字标、当前导航项、在线状态点。
+     --blue    蓝 = 信息。Craft 字标、外链、mono 数值、technical 标签。
+     --warm-*  暖 = 仅用于图片上的暖光渐变叠加，不用于文字、描边、背景块。
+                    （原 --amber 曾同时出现在服务器地址、存档承诺、招募面板上，
+                     与绿蓝形成三色互斗，故从 UI 撤出。） */
+  --accent: #8dcc62;
+  --accent-strong: #63a647;
+  --accent-dim: rgba(141, 204, 98, 0.13);
+  --accent-glow: rgba(141, 204, 98, 0.3);
 
-  --amber: #f4d03f;
-  --amber-dim: rgba(244, 208, 63, 0.14);
+  --blue: #58a6d6;
+  --blue-strong: #3784b5;
+  --blue-dim: rgba(88, 166, 214, 0.13);
+  --blue-glow: rgba(88, 166, 214, 0.3);
 
-  --text-1: #e8f0e8;
-  --text-2: #b3c4b3;
-  --text-3: #7d927d;
+  --warm-glow: rgba(232, 184, 92, 0.22);
+
+  --text-1: #f0f2ec;
+  --text-2: #c0c8bf;
+  --text-3: #89968d;
 
   --danger: #f0564a;
   --ok: #58c169;
 
-  /* 布局 */
+  /* ---------- 布局 ---------- */
   --nav-h: 64px;
   --container: 1180px;
   --radius: 14px;
   --radius-sm: 9px;
 
-  /* 字体 */
-  --font-head: 'Varela Round', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --font-body: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+  /* ---------- 字体 ----------
+     此前声明的 'Varela Round' / 'Noto Sans SC' / 'JetBrains Mono' 从未被加载
+     （index.html 无字体链接、本文件无 @font-face），Windows 上三者全部回落到
+     Microsoft YaHei —— 标题与正文实际是同一个字体，零对比。
+     大陆访问 Google Fonts 不可靠，自托管子集要引入 1–2MB 二进制，
+     因此改用「必然存在的系统字体」拿真实的家族对比：
+
+       --font-sans  正文与标题同族，层级靠字重 + 字距 + 尺度建立
+       --font-mono  唯一职责是机器可读数据：IP、人数、运行时长、版本号、
+                    QQ 号、eyebrow 标签、屏序号。Consolas(Win)/SF Mono(mac)
+                    必然存在，家族对比免费拿到，且语义正确。 */
+  --font-sans: 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', 'Segoe UI', system-ui, -apple-system,
+    sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', Consolas, 'SF Mono', Menlo, 'Courier New', monospace;
 
   --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.55);
   --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.4);
+  /* 卡片材质：渐变底 + 顶部内高光 + 沉降投影，替代原先的纯平暗底 */
+  --card-face: linear-gradient(160deg, #232b27 0%, #1a201e 100%);
+  --card-lift: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 18px 40px -12px rgba(0, 0, 0, 0.7);
 }
 
 * {
@@ -54,13 +77,10 @@ html {
   scroll-behavior: smooth;
 }
 
-/* 锚点区块：滚动定位时预留导航栏高度 */
-section[id] {
-  scroll-margin-top: calc(var(--nav-h) + 8px);
-}
+/* 全屏分页由 fullpage.js 接管滚动，各屏不使用 DOM 锚点 */
 
 body {
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   background: var(--bg-0);
   color: var(--text-1);
   line-height: 1.7;
@@ -68,22 +88,29 @@ body {
   overflow-x: hidden;
 }
 
-/* 背景网格（区块感） */
+/* 背景网格：原先 alpha .018 / 64px 实际不可见，提到 .045 / 96px。
+   仅在没有满幅配图的屏生效（有图屏用 .screen-plate 盖住）。 */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(88, 193, 105, 0.08), transparent),
-    repeating-linear-gradient(0deg, transparent 0 63px, rgba(88, 193, 105, 0.025) 63px 64px),
-    repeating-linear-gradient(90deg, transparent 0 63px, rgba(88, 193, 105, 0.025) 63px 64px);
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(141, 204, 98, 0.07), transparent),
+    repeating-linear-gradient(0deg, transparent 0 95px, rgba(255, 255, 255, 0.045) 95px 96px),
+    repeating-linear-gradient(90deg, transparent 0 95px, rgba(255, 255, 255, 0.045) 95px 96px);
 }
 
-h1, h2, h3, h4, h5 {
-  font-family: var(--font-head);
-  line-height: 1.35;
-  letter-spacing: 0.02em;
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--font-sans);
+  line-height: 1.25;
+  /* 标题靠字重与紧字距建立层级（同族无家族对比可用） */
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 a {
@@ -92,7 +119,7 @@ a {
   transition: color 0.2s;
 }
 a:hover {
-  color: #7ad88a;
+  color: #a8de80;
 }
 
 img {
@@ -107,33 +134,40 @@ img {
   padding: 0 24px;
 }
 
+/* mono 只承担机器可读数据 */
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ---------- 按钮 ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 26px;
+  padding: 13px 28px;
   border-radius: var(--radius-sm);
-  font-family: var(--font-head);
+  font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 700;
+  letter-spacing: -0.01em;
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.25s;
   user-select: none;
 }
 .btn-primary {
-  background: linear-gradient(135deg, #4cbb5e, #2e9b43);
-  color: #06130a;
-  box-shadow: 0 6px 20px rgba(58, 170, 82, 0.35);
+  background: linear-gradient(135deg, #9ad86e, #63a647);
+  color: #08150b;
+  box-shadow: 0 6px 20px rgba(99, 166, 71, 0.35);
 }
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(58, 170, 82, 0.5);
+  box-shadow: 0 12px 30px rgba(99, 166, 71, 0.5);
   color: #04100a;
 }
 .btn-ghost {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.03);
   color: var(--text-1);
   border-color: var(--border);
 }
@@ -142,70 +176,32 @@ img {
   color: var(--accent);
   background: var(--accent-dim);
 }
-.btn-amber {
-  background: linear-gradient(135deg, #f6d74f, #d9b62e);
-  color: #221a02;
-  box-shadow: 0 6px 20px rgba(244, 208, 63, 0.3);
-}
-.btn-amber:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(244, 208, 63, 0.45);
-}
-
-/* ---------- 区块标题 ---------- */
-.section {
-  padding: 90px 0;
-  position: relative;
-}
-.section-head {
-  text-align: center;
-  margin-bottom: 56px;
-}
-.section-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-head);
-  font-size: 13px;
-  letter-spacing: 0.18em;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 14px;
-}
-.section-eyebrow::before,
-.section-eyebrow::after {
-  content: '';
-  width: 32px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent));
-}
-.section-eyebrow::after {
-  background: linear-gradient(90deg, var(--accent), transparent);
-}
-.section-title {
-  font-size: clamp(26px, 4vw, 38px);
-  font-weight: 800;
-  margin-bottom: 14px;
-}
-.section-sub {
-  color: var(--text-2);
-  max-width: 640px;
-  margin: 0 auto;
-  font-size: 15.5px;
-}
 
 /* ---------- 卡片 ---------- */
 .card {
-  background: linear-gradient(160deg, var(--card), var(--bg-2));
+  position: relative;
+  background: var(--card-face);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 10px;
   padding: 26px;
+  box-shadow: var(--card-lift);
   transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+/* 顶部高光细线，给暗底卡片一点材质 */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  border-radius: 10px 10px 0 0;
+  pointer-events: none;
 }
 .card:hover {
   transform: translateY(-4px);
-  border-color: rgba(88, 193, 105, 0.4);
-  box-shadow: var(--shadow-md);
+  border-color: rgba(141, 204, 98, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 24px 50px -14px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(141, 204, 98, 0.12);
 }
 
 /* ---------- 徽章 ---------- */
@@ -217,20 +213,14 @@ img {
   border-radius: 999px;
   font-size: 12.5px;
   font-weight: 700;
-  font-family: var(--font-head);
   border: 1px solid var(--border);
   color: var(--text-2);
   background: var(--bg-2);
 }
 .badge-accent {
   color: var(--accent);
-  border-color: rgba(88, 193, 105, 0.35);
+  border-color: rgba(141, 204, 98, 0.35);
   background: var(--accent-dim);
-}
-.badge-amber {
-  color: var(--amber);
-  border-color: rgba(244, 208, 63, 0.35);
-  background: var(--amber-dim);
 }
 
 /* ---------- 状态点 ---------- */
@@ -252,127 +242,37 @@ img {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.55; }
-}
-
-/* ---------- 表格 ---------- */
-.table-wrap {
-  overflow-x: auto;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-}
-table.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14.5px;
-  min-width: 560px;
-}
-.data-table th {
-  font-family: var(--font-head);
-  text-align: left;
-  padding: 13px 18px;
-  background: var(--bg-2);
-  color: var(--accent);
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
-.data-table td {
-  padding: 12px 18px;
-  border-bottom: 1px solid var(--border-soft);
-  color: var(--text-2);
-}
-.data-table tr:last-child td {
-  border-bottom: none;
-}
-.data-table tbody tr {
-  transition: background 0.2s;
-}
-.data-table tbody tr:hover {
-  background: var(--accent-dim);
-}
-.data-table td code {
-  font-family: var(--font-mono);
-  color: #9fe8ab;
-  background: var(--bg-2);
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 13px;
-  white-space: nowrap;
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
 }
 
 /* ---------- 动画 ---------- */
-.reveal {
-  opacity: 0;
-  transform: translateY(26px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-  /* 允许作为 grid/flex 子项时收缩，避免内容撑破容器 */
-  min-width: 0;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: none;
-}
-
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
 }
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 .fade-up {
   animation: fadeUp 0.8s ease both;
-}
-
-/* ---------- 页脚 ---------- */
-footer.site-footer {
-  border-top: 1px solid var(--border);
-  background: var(--bg-1);
-  padding: 44px 0 30px;
-  margin-top: 40px;
-}
-.footer-inner {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 28px;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-.footer-brand p {
-  color: var(--text-3);
-  font-size: 13.5px;
-  margin-top: 6px;
-}
-.footer-links {
-  display: flex;
-  gap: 36px;
-  flex-wrap: wrap;
-}
-.footer-links h5 {
-  font-size: 14px;
-  color: var(--text-1);
-  margin-bottom: 10px;
-}
-.footer-links a {
-  display: block;
-  color: var(--text-3);
-  font-size: 13.5px;
-  padding: 3px 0;
-}
-.footer-links a:hover {
-  color: var(--accent);
-}
-.footer-bottom {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border-soft);
-  text-align: center;
-  color: var(--text-3);
-  font-size: 13px;
 }
 
 /* ---------- 滚动条 ---------- */
@@ -389,27 +289,4 @@ footer.site-footer {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
-}
-
-/* ---------- 代码块 ---------- */
-pre.code-block {
-  background: var(--bg-0);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 18px 20px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: #9fe8ab;
-  overflow-x: auto;
-  line-height: 1.8;
-}
-
-/* ---------- 响应式 ---------- */
-@media (max-width: 768px) {
-  .section {
-    padding: 64px 0;
-  }
-  .footer-inner {
-    flex-direction: column;
-  }
 }

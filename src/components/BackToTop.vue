@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useFullPageStore } from '../stores/fullpage'
+import AppIcon from './AppIcon.vue'
 
-const visible = ref(false)
+const fpStore = useFullPageStore()
+
+/** 窄屏下 fullpage 退化为普通滚动，此时才有真实的 scrollY */
+const pageScrolled = ref(false)
+
+/** fullpage 用 transform 翻页，scrollY 恒为 0，因此还要看当前屏 */
+const visible = computed(() => pageScrolled.value || fpStore.hasLeftFirstScreen)
 
 function onScroll() {
-  visible.value = window.scrollY > 600
+  pageScrolled.value = window.scrollY > 600
 }
 
 function toTop() {
+  fpStore.goToId('hero')
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
@@ -20,7 +29,9 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 
 <template>
   <transition name="fade">
-    <button v-if="visible" class="back-top" aria-label="返回顶部" @click="toTop">↑</button>
+    <button v-if="visible" class="back-top" aria-label="返回顶部" @click="toTop">
+      <AppIcon name="arrow-up" :size="20" />
+    </button>
   </transition>
 </template>
 
@@ -32,6 +43,8 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
   z-index: 90;
   width: 46px;
   height: 46px;
+  display: grid;
+  place-items: center;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--bg-2);

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import AppIcon from './AppIcon.vue'
 
 /** 一键复制文本按钮 */
 const props = defineProps<{ text: string; label?: string }>()
@@ -23,9 +24,9 @@ async function copy() {
 </script>
 
 <template>
-  <button class="copy-btn" :class="{ copied }" @click="copy">
-    <span v-if="copied">✓ 已复制</span>
-    <span v-else>{{ label ?? '复制' }}</span>
+  <button class="copy-btn" :class="{ copied, compact: label === '复制' }" @click="copy">
+    <AppIcon v-if="copied" name="check" :size="15" />
+    <span>{{ copied ? '已复制' : (label ?? '复制') }}</span>
   </button>
 </template>
 
@@ -41,7 +42,7 @@ async function copy() {
   color: var(--text-2);
   font-size: 13.5px;
   font-weight: 700;
-  font-family: var(--font-head);
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.25s;
 }
@@ -53,5 +54,16 @@ async function copy() {
   border-color: var(--accent);
   background: var(--accent-dim);
   color: var(--accent);
+}
+.copy-btn.compact {
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  background: transparent;
+  color: var(--text-3);
+}
+.copy-btn.compact:hover {
+  background: var(--accent-dim);
 }
 </style>

@@ -34,3 +34,6 @@ class IntersectionObserverMock {
 }
 
 ;(globalThis as any).IntersectionObserver = IntersectionObserverMock
+
+// jsdom 未实现 window.scrollTo（调用会向虚拟控制台抛 jsdomError）
+window.scrollTo = (() => {}) as typeof window.scrollTo
