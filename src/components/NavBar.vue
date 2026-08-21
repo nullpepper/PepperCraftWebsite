@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
@@ -8,11 +8,7 @@ const route = useRoute()
 const links = [
   { to: '/', label: '首页', exact: true },
   { to: '/about', label: '关于' },
-  { to: '/status', label: '运行状态' },
   { to: '/features', label: '特色玩法' },
-  { to: '/towns', label: '联盟领地' },
-  { to: '/plugins', label: '自研插件' },
-  { to: '/docs', label: '文档速查' },
   { to: '/join', label: '加入我们' },
 ]
 

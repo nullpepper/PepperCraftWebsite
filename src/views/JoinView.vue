@@ -90,21 +90,13 @@ const openIdx = ref<number | null>(0)
               <p class="contact-desc">服务器问题反馈与建议直达</p>
             </div>
           </Reveal>
-          <Reveal :delay="300">
-            <a class="card contact-card" :href="SITE.github" target="_blank" rel="noopener">
-              <span class="contact-icon">🐙</span>
-              <h3>GitHub</h3>
-              <p class="contact-value mono">nullpepper</p>
-              <p class="contact-desc">网站与自研插件全部开源</p>
-            </a>
-          </Reveal>
         </div>
 
         <Reveal :delay="150">
           <div class="activity-banner">
             <span class="activity-icon">🎉</span>
             <p>
-              服务器会不定期举行主题活动，发放<strong style="color: var(--amber)">限定奖励与特殊称号</strong>。<br />
+              服务器会不定期举行主题活动，发放<strong style="color: var(--amber)">限定奖励与特殊称号</strong>。
               欢迎各位有意向但平时精力有限的玩家前来"养老"领奖。
             </p>
           </div>
@@ -122,7 +114,7 @@ const openIdx = ref<number | null>(0)
           </div>
         </Reveal>
         <div class="faq-list">
-          <Reveal v-for="(f, i) in FAQS" :key="f.q" :delay="(i % 4) * 60">
+          <Reveal v-for="(f, i) in FAQS.slice(0, 4)" :key="f.q" :delay="(i % 4) * 60">
             <div class="faq-item" :class="{ open: openIdx === i }">
               <button class="faq-q" @click="openIdx = openIdx === i ? null : i">
                 <span>{{ f.q }}</span>
@@ -234,8 +226,10 @@ const openIdx = ref<number | null>(0)
 }
 .contact-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 18px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 .contact-card {
   text-align: center;
@@ -331,14 +325,10 @@ const openIdx = ref<number | null>(0)
 }
 @media (max-width: 900px) {
   .contact-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    max-width: 480px;
   }
   .join-steps {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 560px) {
-  .contact-grid {
     grid-template-columns: 1fr;
   }
 }

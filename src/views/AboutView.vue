@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { SITE, SERVER_PROFILE } from '../data/site'
-import { TIMELINE, SNAPSHOT_STATS } from '../data/timeline'
+import { SITE } from '../data/site'
 import Reveal from '../components/Reveal.vue'
 </script>
 
@@ -26,8 +25,8 @@ import Reveal from '../components/Reveal.vue'
           <div class="about-text">
             <p>
               PepperCraft 是一个由 Minecraft 爱好者发起的
-              <strong style="color: var(--text-1)">高版本纯净生存公益服</strong>。
-              我们致力于打造日均在线 {{ SITE.dailyOnline }} 的高质量社区。
+              <strong style="color: var(--text-1)">高版本纯净生存公益服</strong>，
+              致力于打造日均在线 {{ SITE.dailyOnline }} 的高质量社区。
             </p>
             <p>
               与那些塞满充值入口、花哨礼包、复杂副本的商业服不同，这里坚持
@@ -44,71 +43,47 @@ import Reveal from '../components/Reveal.vue'
       </div>
     </section>
 
-    <!-- 数据一览 -->
+    <!-- 技术保障 -->
     <section class="section section-alt">
       <div class="container">
         <Reveal>
           <div class="section-head">
-            <span class="section-eyebrow">数据一览</span>
-            <h2 class="section-title">用数字说话</h2>
-            <p class="section-sub">以下数据为服务器存档快照（{{ SITE.snapshotTime }} 抓取），真实来自服务器本体。</p>
+            <span class="section-eyebrow">技术保障</span>
+            <h2 class="section-title">🛠️ 安心游玩</h2>
           </div>
         </Reveal>
-        <div class="stat-grid">
-          <Reveal v-for="(s, i) in [
-            { n: SNAPSHOT_STATS.startDate, l: '开服时间' },
-            { n: `${SNAPSHOT_STATS.players}`, l: '累计玩家' },
-            { n: `${SNAPSHOT_STATS.totalHours.toLocaleString()}h`, l: '累计游戏时长' },
-            { n: `${SNAPSHOT_STATS.towns}`, l: '现存联盟' },
-            { n: SERVER_PROFILE.difficulty, l: '游戏难度' },
-            { n: '60+', l: '运行插件' },
-          ]" :key="s.l" :delay="i * 80">
-            <div class="stat-cell">
-              <span class="stat-big">{{ s.n }}</span>
-              <span class="stat-small">{{ s.l }}</span>
+        <div class="tech-grid">
+          <Reveal v-for="(t, i) in [
+            { icon: '💾', k: '双重备份', v: '本地 + 异地双重备份，存档无忧' },
+            { icon: '🛡️', k: '混合反作弊', v: '付费级反作弊（Matrix），公平竞技' },
+            { icon: '🔑', k: '正版验证', v: '强制正版验证，完全遵守官方 EULA' },
+            { icon: '🧑‍💻', k: '专业开发', v: '腐竹 3 年以上开发经验，自研率 18.5%+' },
+          ]" :key="t.k" :delay="i * 80">
+            <div class="tech-cell">
+              <span class="tech-icon">{{ t.icon }}</span>
+              <h3>{{ t.k }}</h3>
+              <p>{{ t.v }}</p>
             </div>
           </Reveal>
         </div>
       </div>
     </section>
 
-    <!-- 技术档案 -->
+    <!-- 大事记 -->
     <section class="section">
       <div class="container">
         <Reveal>
           <div class="section-head">
-            <span class="section-eyebrow">技术档案</span>
-            <h2 class="section-title">🛠️ 强大的技术保障</h2>
-          </div>
-        </Reveal>
-        <div class="tech-grid">
-          <Reveal v-for="(v, k, i) in SERVER_PROFILE" :key="k" :delay="i * 60">
-            <div class="tech-cell">
-              <span class="tech-k">{{ k }}</span>
-              <span class="tech-v">{{ v }}</span>
-            </div>
-          </Reveal>
-        </div>
-        <Reveal :delay="120">
-          <p class="tech-note">
-            腐竹拥有 3 年以上专业开发经验，服内插件自研率超 18.5%，
-            配备本地/异地双重备份与付费级混合反作弊，强制正版验证，完全遵守官方 EULA。
-          </p>
-        </Reveal>
-      </div>
-    </section>
-
-    <!-- 时间线 -->
-    <section class="section section-alt">
-      <div class="container">
-        <Reveal>
-          <div class="section-head">
             <span class="section-eyebrow">大事记</span>
-            <h2 class="section-title">一路走来的足迹</h2>
+            <h2 class="section-title">一路走来</h2>
           </div>
         </Reveal>
         <div class="timeline">
-          <Reveal v-for="(e, i) in TIMELINE" :key="e.date" :delay="i * 90">
+          <Reveal v-for="(e, i) in [
+            { date: '2023-02-20', title: 'PepperCraft 开服', desc: '高版本纯净生存公益服正式上线。', icon: '🚀' },
+            { date: '2025-01', title: '3 年存档承诺', desc: '郑重决定：3 年内不再清除存档内容。', icon: '📜' },
+            { date: '2025-07', title: '官方文档开放', desc: 'docs.pepper.ltd 上线：联盟、领地、经济一册通览。', icon: '📚' },
+          ]" :key="e.date" :delay="i * 90">
             <div class="tl-item">
               <span class="tl-icon">{{ e.icon }}</span>
               <div class="tl-body">
@@ -162,72 +137,41 @@ import Reveal from '../components/Reveal.vue'
   font-size: 16px;
   text-align: center;
 }
-.stat-grid {
+.tech-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 18px;
+  max-width: 980px;
+  margin: 0 auto;
 }
-.stat-cell {
+.tech-cell {
   text-align: center;
-  padding: 30px 16px;
+  padding: 26px 20px;
   border-radius: var(--radius);
   background: var(--bg-2);
   border: 1px solid var(--border);
   transition: all 0.3s;
 }
-.stat-cell:hover {
+.tech-cell:hover {
   border-color: var(--accent);
   transform: translateY(-3px);
 }
-.stat-big {
+.tech-icon {
+  font-size: 30px;
   display: block;
-  font-family: var(--font-head);
-  font-size: clamp(22px, 3.4vw, 34px);
-  font-weight: 800;
-  color: var(--accent);
+  margin-bottom: 10px;
 }
-.stat-small {
-  display: block;
-  margin-top: 6px;
+.tech-cell h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+.tech-cell p {
   color: var(--text-3);
   font-size: 13px;
-  letter-spacing: 0.1em;
-}
-.tech-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-.tech-cell {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 18px 20px;
-  border-radius: var(--radius-sm);
-  background: var(--bg-2);
-  border: 1px solid var(--border-soft);
-}
-.tech-k {
-  font-size: 12px;
-  color: var(--text-3);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.tech-v {
-  font-size: 15px;
-  color: var(--text-1);
-  font-weight: 600;
-}
-.tech-note {
-  max-width: 720px;
-  margin: 30px auto 0;
-  text-align: center;
-  color: var(--text-2);
-  font-size: 14.5px;
-  line-height: 1.9;
+  line-height: 1.7;
 }
 .timeline {
-  max-width: 720px;
+  max-width: 640px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -279,13 +223,13 @@ import Reveal from '../components/Reveal.vue'
   color: var(--text-2);
   font-size: 14px;
 }
-@media (max-width: 800px) {
-  .stat-grid, .tech-grid {
+@media (max-width: 900px) {
+  .tech-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 @media (max-width: 520px) {
-  .stat-grid, .tech-grid {
+  .tech-grid {
     grid-template-columns: 1fr;
   }
 }
