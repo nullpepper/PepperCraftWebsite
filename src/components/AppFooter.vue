@@ -91,11 +91,15 @@ const navs = [
 .footer-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0;
   font-size: 27px;
   letter-spacing: -0.03em;
   margin-bottom: 12px;
   color: var(--accent);
+}
+/* 图标与文字留距；Pepper/Craft 两个 span 之间保持无缝 */
+.footer-logo svg {
+  margin-right: 10px;
 }
 .fl-pepper { color: var(--accent); }
 .fl-craft { color: var(--blue); }
