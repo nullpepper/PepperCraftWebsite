@@ -107,14 +107,14 @@ onBeforeUnmount(() => {
           <p class="screen-sub">自 {{ SITE.serverStart }} 开服 · 实时在线人数与运行时长</p>
         </header>
         <ServerStatusCard />
+        <section class="uptime-card">
+          <p class="uptime-label mono">UPTIME · 自 {{ SITE.serverStart }}</p>
+          <UptimeCounter />
+        </section>
       </div>
       <figure class="split-media">
         <img :src="'/assets/img/Redstone.png'" alt="红石机械夜景" loading="lazy" />
         <div class="media-scrim" />
-        <figcaption class="media-overlay">
-          <p class="overlay-label mono">UPTIME · 自 {{ SITE.serverStart }}</p>
-          <UptimeCounter />
-        </figcaption>
       </figure>
     </section>
 
@@ -537,19 +537,20 @@ onBeforeUnmount(() => {
 .about-screen .split-media img {
   filter: saturate(1.05) brightness(1.02);
 }
-.media-overlay {
-  position: absolute;
-  left: 28px;
-  right: 28px;
-  bottom: 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* UPTIME 从配图上挪到文案区：作为「运行时长」卡片排在状态卡下方 */
+.uptime-card {
+  margin-top: 14px;
+  padding: 20px 24px;
+  background: var(--card-face);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--card-lift);
 }
-.overlay-label {
+.uptime-label {
   font-size: 11.5px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   color: var(--text-3);
+  margin-bottom: 14px;
 }
 
 /* 关于屏内容 */
@@ -1075,10 +1076,6 @@ a.contact-card:hover {
   }
   .split-media {
     flex: 0 0 38vh;
-  }
-  .media-overlay {
-    left: 18px;
-    bottom: 16px;
   }
   .about-screen .split-media {
     flex-basis: 30vh;

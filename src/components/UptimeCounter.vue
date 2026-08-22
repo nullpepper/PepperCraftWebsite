@@ -52,7 +52,7 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-/* 叠在「运行状态」屏的红石配图上，因此用半透明玻璃面而非实心暗块 */
+/* 用于「运行状态」屏文案区的运行时长卡片内（原叠图，后按用户反馈下移） */
 .uptime {
   display: inline-flex;
   align-items: stretch;
