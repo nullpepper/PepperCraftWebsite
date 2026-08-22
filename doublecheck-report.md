@@ -12,7 +12,7 @@
 
 ## Test evidence
 - failing runs: 0
-- passing runs: 9
+- passing runs: 10
 
 - [spec] 修复固定悬浮导航栏（.nav）在桌面端按钮不可点击的问题：桌面宽度下导航链接与「立即加入」始终保持可点击、可聚焦；移动端关闭态菜单仍保持 inert + aria-hidden 的无障碍隐藏。
 - [green] npx vitest run src/__tests__/nav-mobile.test.ts 2>&1 | tail -60
@@ -25,6 +25,7 @@
 - [green] npx vitest run src/__tests__/join-copy-hitbox.test.ts 2>&1 | tail -25
 - [green] npx vitest run src/__tests__/join-copy-hitbox.test.ts 2>&1 | tail -10
 - [green] npm test 2>&1 | tail -10
+- [green] npm test 2>&1 | tail -18
 
 ## Adversary review
 No adversary review ran for this session.
@@ -33,13 +34,14 @@ No adversary review ran for this session.
 Not run.
 
 ## Delivery
-- implementation edits: 7
+- implementation edits: 8
 
-## Addendum — 本次 join 复制按钮修复的真实红绿时间线与真浏览器实证（2026-08-23，实施者执行）
+## Addendum — 真实红绿时间线、真浏览器实证与人工逐维核查（2026-08-23，实施者执行）
 
-> 说明：上方工具生成的「Test evidence」把每次 vitest 调用一律标 [green]，其中
+> 说明：① 上方案工具生成的「Test evidence」把每次 vitest 调用一律标 [green]，其中
 > `npx vitest run src/__tests__/join-copy-hitbox.test.ts | tail -25` 那次实际是
-> **red**（`Tests 1 failed (1)`），以本补记为准。
+> **red**（`Tests 1 failed (1)`），以本补记为准。② 本会话无 workflow 编排链
+> （两次 `verify: true` 均返回 "Verification: Not run"），逐维核查为会话内人工执行，如实记录。
 
 ### 红绿时间线
 
@@ -48,8 +50,8 @@ Not run.
 | 01:04 | 🔴 RED | 真浏览器（Chromium 151 headless shell，1440×900）：`.contact-card .copy-btn` 中心 `elementFromPoint` 命中 `DIV.join-bg`；真实鼠标点击后按钮仍为「复制」、`isCopied=false`、剪贴板仍为 pepper.ltd —— 复现「点击完全无反应」。 |
 | 01:05 | 🔴 RED | 新源契约测试 `join-copy-hitbox.test.ts`：`.join-bg` 块无 `pointer-events: none` → 1 failed。 |
 | 01:05 | 🟢 GREEN | `.join-bg` 加 `pointer-events: none` 后同测试 1/1 通过；`npm run build` 成功。 |
-| 01:06 | 🟢 GREEN | 真浏览器复验：QQ 复制按钮 `elementFromPoint` 命中 `BUTTON.copy-btn.compact`；真实点击后文案「已复制」、`isCopied=true`、剪贴板 = `2747789919`；IP「复制 IP」仍可点击（未回归）。 |
-| 01:06 | 🟢 全量 | `npx vitest run`：11 文件 / 54 测试全过；`eslint .` 与 Prettier 检查通过。 |
+| 01:06–01:07 | 🟢 GREEN | 真浏览器复验：QQ 复制按钮 `elementFromPoint` 命中 `BUTTON.copy-btn.compact`；真实点击后文案「已复制」、`isCopied=true`、剪贴板 = `2747789919`；IP「复制 IP」仍可点击（未回归）。全量 `npm test`：11 文件 / 54 测试全过；`eslint` 与 Prettier 通过。 |
+| 01:07:48 | 🟢 GREEN | 交付门复核：提交后当前 HEAD 全量 `npm test` 再次 54/54 通过。 |
 
 ### 根因与修复
 
@@ -57,8 +59,17 @@ fullpage.js 把 section 内容包进 `.fp-overflow` 后，`.join-screen > * { z-
 只命中包裹层本身；包裹层内部的普通流内容（`.contact-card` 等）没有层叠上下文，
 被绝对定位、`z-index:0` 的 `.join-bg` 覆盖并拦截指针事件。IP「复制 IP」之所以正常，
 是因为 `.join-card` 带 `backdrop-filter: blur(8px)` 自成层叠上下文，恰好逃过覆盖。
-修复：`.join-bg` 加 `pointer-events: none`（纯装饰背景不参与命中测试），一行 CSS，
-绘制不变。
+修复：`.join-bg` 加 `pointer-events: none`（纯装饰背景不参与命中测试），一行 CSS，绘制不变。
+
+### 人工逐维核查（adversary pass 结论：未发现可支撑的反对意见）
+
+| 维度 | 结论 | 证据 |
+|---|---|---|
+| Goal | ✅ | 真浏览器点击 QQ「复制」→「已复制」+ 剪贴板 2747789919 |
+| Acceptance | ✅ | ① elementFromPoint=BUTTON.copy-btn.compact；② 源契约测试先红后绿；③ 54/54 + build + lint + prettier；④ 仅加 pointer-events，绘制未动 |
+| Failure modes | ✅ | a) 真浏览器 elementFromPoint 复验（::after 随父元素生效）；b) 未采用 z-index 提升方案，水印层级未动；c) 真浏览器已双向实证；d) IP 按钮同时验证未回归 |
+| Scope / Non-goals | ✅ | 仅 HomeView.vue 1 处 CSS + 新测试；CopyButton 逻辑、其他屏、导航均未动 |
+| Priorities | ✅ | 最小改动（1 行）优先；零视觉回归；真浏览器实证优先 |
 
 ### 已知限制
 
