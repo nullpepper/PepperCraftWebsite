@@ -1085,6 +1085,13 @@ a.contact-card:hover {
   gap: 12px;
   flex-wrap: wrap;
 }
+/* 按钮内群号：mono 行盒（~1.7em）远高于 sans 文字（~1.4em），
+   直接混排会让数字上下各凸出 2~3px 显得「没对齐」；收紧字号与行高贴合文字盒 */
+.faq-actions .btn .mono {
+  font-size: 13.5px;
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+}
 .faq-list {
   display: flex;
   flex-direction: column;

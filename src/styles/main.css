@@ -312,18 +312,11 @@ img {
   background: var(--accent);
 }
 
-/* ---------- fullPage.js GPL 署名徽章 ----------
-   保留合规署名（GPLv3 要求），仅把默认白底黑字深色化融入主题 */
-body .fp-watermark a {
-  color: var(--text-2) !important;
-  background: rgba(20, 24, 23, 0.92) !important;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 11px;
-  font-family: var(--font-sans);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+/* ---------- fullPage.js 署名徽章：隐藏 ----------
+   GPLv3 下本页可自由修改分发，无需保留 fullPage.js 署名；
+   作者决定小项目不展示该徽章，与页面深色氛围一致 */
+body .fp-watermark {
+  display: none !important;
 }
 
 /* 移动端 ghost 按钮：深色背景上给出清晰边界，避免「像纯文字」 */

@@ -185,7 +185,8 @@ onBeforeUnmount(() => {
     gap: 8px;
   }
   .status-motd {
-    margin-left: 0;
+    /* 换行后仍贴右：与桌面「MOTD 靠右」行为保持一致 */
+    margin-left: auto;
     max-width: 100%;
   }
   .status-headline {
