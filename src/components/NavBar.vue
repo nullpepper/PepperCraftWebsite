@@ -16,9 +16,16 @@ const links = [
 const pageScrolled = ref(false)
 const open = ref(false)
 
+/** 移动断点（<=960 与 CSS 对齐）：只有移动端关闭态才需要隐藏菜单面板。
+    初始化即读视口，避免首帧（onMounted 之前）桌面导航短暂带上 inert */
+const isMobile = ref(typeof window !== 'undefined' ? window.innerWidth <= 960 : false)
+
 const active = computed(() => fpStore.currentScreen.id)
 /** fullpage 用 transform 翻页，scrollY 恒为 0，因此还要看当前屏 */
 const scrolled = computed(() => pageScrolled.value || fpStore.hasLeftFirstScreen)
+
+/** 移动端且菜单关闭：把面板移出 Tab 序与读屏（桌面导航始终可见，绝不能 inert） */
+const menuCollapsed = computed(() => isMobile.value && !open.value)
 
 /** 菜单打开时锁定页面滚动（移动端原生滚动模式下防止背后页面滚动） */
 watch(open, (v) => {
@@ -29,17 +36,23 @@ function onScroll() {
   pageScrolled.value = window.scrollY > 24
 }
 
+function syncViewport() {
+  isMobile.value = window.innerWidth <= 960
+}
+
 function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape' && open.value) open.value = false
 }
 
 function onResize() {
+  syncViewport()
   // 回到桌面断点后菜单不可见：同步关闭并释放滚动锁
-  if (window.innerWidth > 960 && open.value) open.value = false
+  if (!isMobile.value && open.value) open.value = false
 }
 
 onMounted(() => {
   onScroll()
+  syncViewport()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('resize', onResize)
   document.addEventListener('keydown', onKeydown)
@@ -75,8 +88,8 @@ function go(id: string) {
         class="nav-links"
         :class="{ open }"
         id="nav-links"
-        :inert="!open || undefined"
-        :aria-hidden="open ? 'false' : 'true'"
+        :inert="menuCollapsed || undefined"
+        :aria-hidden="menuCollapsed ? 'true' : 'false'"
       >
         <button
           v-for="l in links"
