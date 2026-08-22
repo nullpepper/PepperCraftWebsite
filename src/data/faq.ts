@@ -7,7 +7,7 @@ export interface FAQItem {
 export const FAQS: FAQItem[] = [
   {
     q: '服务器是什么版本？',
-    a: '服务器运行在最新高版本（Purpur 内核），并通过 ViaVersion / ViaBackwards 支持低版本 Java 客户端进入；基岩版玩家可通过 Floodgate 直接加入。',
+    a: '服务器运行在最新高版本，支持低版本 Java 客户端进入，基岩版玩家也可以直接加入。',
   },
   {
     q: '如何进入服务器？',
@@ -27,11 +27,11 @@ export const FAQS: FAQItem[] = [
   },
   {
     q: '如何保护我的建筑？',
-    a: '加入或创建联盟（/town create），然后使用 /town claim 认领你脚下的区块，建筑就受到保护了。',
+    a: '加入联盟（/union apply）或创建联盟（/union create）后，用 /claim 认领你脚下的区块，家园与联盟领地都会受到保护。',
   },
   {
     q: '服务器卡吗？允许高频红石吗？',
-    a: '服务器配备高性能硬件与优化配置，允许高频红石、刷铁机、地毯/TNT 复制等生电玩法，同时有 Matrix 反作弊保障公平。',
+    a: '服务器配备高性能硬件与优化配置，允许高频红石、刷铁机、地毯/TNT 复制等生电玩法，同时有反作弊保障公平。',
   },
   {
     q: '遇到问题找谁？',

@@ -21,7 +21,7 @@ export const SITE = {
   archivePromise: '2025年1月郑重决定：3年内不再清除存档内容！',
   archivePromiseYears: 3,
   dailyOnline: '30+',
-  version: 'Purpur 1.21+ / 最新版（跨版本支持）',
+  version: '1.21+ / 最新版（跨版本支持）',
   difficulty: '困难（Hard）',
   gameMode: '生存（Survival）',
   maxPlayers: 1000,
