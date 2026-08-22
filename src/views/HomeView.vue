@@ -957,6 +957,10 @@ onBeforeUnmount(() => {
   background: var(--join-img) center/cover no-repeat;
   opacity: 0.07;
   filter: grayscale(0.35);
+  /* fullpage 把内容包进 .fp-overflow 后，.join-bg 会浮在普通流内容（.contact-card 等）
+     之上并拦截指针事件——腐竹 QQ「复制」按钮曾因此完全点不动；
+     背景为纯装饰层，不参与命中测试 */
+  pointer-events: none;
 }
 .join-bg::after {
   content: '';
