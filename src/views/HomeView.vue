@@ -258,7 +258,7 @@ onBeforeUnmount(() => {
             没找到答案？加交流群直接问，或在文档站检索。
           </p>
           <div class="faq-actions">
-            <button class="btn btn-primary" @click="scrollTo('join')">去加入我们</button>
+            <a class="btn btn-primary" :href="SITE.docsUrl" target="_blank" rel="noopener">文档站入口</a>
             <a class="btn btn-ghost" :href="SITE.qqGroupUrl" target="_blank" rel="noopener">
               QQ 群 <span class="mono">{{ SITE.qqGroup }}</span>
             </a>
