@@ -21,7 +21,8 @@ export const useStatusStore = defineStore('status', {
   state: (): ServerStatusState => ({
     status: 'loading',
     players: null,
-    maxPlayers: 1000,
+    // 初始值取站点配置（与服务器容量一致 2333），API 返回后以实时数据覆盖
+    maxPlayers: SITE.maxPlayers,
     version: null,
     motd: null,
     lastCheck: null,
@@ -45,13 +46,18 @@ export const useStatusStore = defineStore('status', {
         if (data && data.online === true) {
           this.status = 'online'
           this.players = toPlayerCount(data.players, this.players)
+          // uapis.cn 真实字段是顶层 max_players（如 2333），主分支必须同时更新
+          this.maxPlayers = toPlayerCount(data.max_players ?? data.players?.max, this.maxPlayers)
           this.version =
             data.version?.name ??
             data.version?.name_clean ??
             data.version ??
             data.protocol?.name ??
             null
-          this.motd = normalizeMotd(data.motd ?? data.description)
+          // uapis.cn 无 motd/description 字段，返回的是 motd_clean/motd_html
+          this.motd = normalizeMotd(
+            data.motd_clean ?? data.motd_html ?? data.motd ?? data.description,
+          )
           this.lastCheck = new Date()
           return
         }

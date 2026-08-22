@@ -143,6 +143,20 @@ img {
   font-variant-numeric: tabular-nums;
 }
 
+/* 视觉隐藏但仍可被读屏：供 aria-live 状态播报等无样式反馈位使用 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---------- 按钮 ---------- */
 .btn {
   display: inline-flex;
@@ -312,9 +326,12 @@ img {
   background: var(--accent);
 }
 
-/* ---------- fullPage.js 署名徽章：隐藏 ----------
-   GPLv3 下本页可自由修改分发，无需保留 fullPage.js 署名；
-   作者决定小项目不展示该徽章，与页面深色氛围一致 */
+/* ---------- fullPage.js 署名水印：隐藏 ----------
+   fullpage.js v4 在 licenseKey 无效时强制渲染右下角署名水印；GPLv3 条款要求 prominent notice。
+   2026-08-22 业主明确决定暂不申请官方 GPL key → 按业主决定隐藏水印，
+   合规缓冲：页脚保留「基于 fullPage.js（GPLv3）构建」声明作为 prominent notice。
+   后续若申请到有效 key（https://alvarotrigo.com/fullPage/extensions/requestKey.html），
+   报错自动消失且无需本规则；若项目涉及任何商业/赞助行为，请先购买商用许可。 */
 body .fp-watermark {
   display: none !important;
 }
@@ -324,5 +341,19 @@ body .fp-watermark {
   .btn-ghost {
     border-color: rgba(255, 255, 255, 0.28);
     background: rgba(8, 11, 10, 0.35);
+  }
+}
+
+/* 超高分辨率（≥2880px 逻辑宽：4K 原生 100% 缩放 / 5K）：
+   局部调高设计基线 —— 导航加高、容器放宽、按钮加大；各组件内的
+   文本放大在其自身样式的同名 media 块里，与这里配套生效 */
+@media (min-width: 2880px) {
+  :root {
+    --nav-h: 80px;
+    --container: 1440px;
+  }
+  .btn {
+    padding: 17px 34px;
+    font-size: 19px;
   }
 }

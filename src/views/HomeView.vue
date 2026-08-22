@@ -13,10 +13,22 @@ import ServerStatusCard from '../components/ServerStatusCard.vue'
 import AppFooter from '../components/AppFooter.vue'
 import AppIcon from '../components/AppIcon.vue'
 // 图片经 Vite 打包：内容 hash 破缓存 + base 路径自动适配（子路径部署不 404）
-import heroBg from '../assets/img/bg.png'
-import redstoneImg from '../assets/img/Redstone.png'
-import photoImg from '../assets/img/photo.png'
-import joinBg from '../assets/img/Residence.png'
+// 高分辨率适配：每张大幅图提供 1920/2560/3840 三档 srcset，浏览器按「目标 CSS 尺寸 × DPR」取档，
+// 4K/Retina 屏不再 2 倍拉伸发糊，1080p 仍只下载 1920 档（体积不涨）
+import heroBg from '../assets/img/bg.webp'
+import heroBg2560 from '../assets/img/bg-2560.webp'
+import heroBg3840 from '../assets/img/bg-3840.webp'
+import redstoneImg from '../assets/img/Redstone.webp'
+import redstone2560 from '../assets/img/Redstone-2560.webp'
+import redstone3840 from '../assets/img/Redstone-3840.webp'
+import photoImg from '../assets/img/photo.webp'
+import photo2560 from '../assets/img/photo-2560.webp'
+import photo3840 from '../assets/img/photo-3840.webp'
+import joinBg from '../assets/img/Residence.webp'
+
+// srcset 文本（w 描述符 + sizes 让浏览器按需取档）
+const heroSrcset = `${heroBg} 1920w, ${heroBg2560} 2560w, ${heroBg3840} 3840w`
+const splitSrcset = (a: string, b: string, c: string) => `${a} 1920w, ${b} 2560w, ${c} 3840w`
 
 const fpStore = useFullPageStore()
 const faqOpen = ref<number | null>(0)
@@ -29,13 +41,17 @@ function scrollTo(id: string) {
 
 onMounted(() => {
   fpInstance = new fullpage('#fullpage', {
+    // GPLv3 免费 key 申请（开源项目表单）：https://alvarotrigo.com/fullPage/extensions/requestKey.html
+    // 填入真实 key 后：① 控制台 2 条 license 报错消失 ② 可设 credits.enabled: false 关闭署名水印
     licenseKey: 'GPLv3',
     // 视觉
     navigation: false,
     // 行为
     keyboardScrolling: true,
     fitToSection: true,
-    responsiveWidth: 768,
+    // 与 main.css 的 900px 断点对齐：<900px 退化原生滚动，
+    // 修复 769–900px 区间全屏分页 + 移动布局冲突导致的翻页卡死
+    responsiveWidth: 900,
     responsiveHeight: 620,
     easing: 'easeInOutCubic',
     easingcss3: 'cubic-bezier(0.7, 0, 0.3, 1)',
@@ -65,7 +81,20 @@ onBeforeUnmount(() => {
   <div id="fullpage">
     <!-- ============ 屏1 HERO ============ -->
     <section class="section fp-screen hero-screen">
-      <div class="hero-bg" :style="{ '--hero-img': `url(${heroBg})` }" />
+      <!-- Hero 背景用 <img>：解析 HTML 即发起下载（CSS 背景要等 CSSOM），
+           fetchpriority=high 加固 LCP 优先级；图片本体由 .hero-photo 承载，
+           .hero-bg 只叠光效渐变（DOM 顺序保证渐变压在图上层） -->
+      <img
+        class="hero-photo"
+        :src="heroBg"
+        :srcset="heroSrcset"
+        sizes="100vw"
+        alt=""
+        aria-hidden="true"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <div class="hero-bg" />
       <span class="screen-num" aria-hidden="true">01</span>
       <div class="hero-inner">
         <p class="hero-badge">
@@ -122,7 +151,13 @@ onBeforeUnmount(() => {
         </section>
       </div>
       <figure class="split-media">
-        <img :src="redstoneImg" alt="红石机械夜景" loading="lazy" />
+        <img
+          :src="redstoneImg"
+          :srcset="splitSrcset(redstoneImg, redstone2560, redstone3840)"
+          sizes="(max-width: 900px) 100vw, 42vw"
+          alt="红石机械夜景"
+          loading="lazy"
+        />
         <div class="media-scrim" />
       </figure>
     </section>
@@ -158,7 +193,13 @@ onBeforeUnmount(() => {
         </ul>
       </div>
       <figure class="split-media">
-        <img :src="photoImg" alt="玩家合影" loading="lazy" />
+        <img
+          :src="photoImg"
+          :srcset="splitSrcset(photoImg, photo2560, photo3840)"
+          sizes="(max-width: 900px) 100vw, 42vw"
+          alt="玩家合影"
+          loading="lazy"
+        />
         <div class="media-scrim" />
       </figure>
     </section>
@@ -173,7 +214,12 @@ onBeforeUnmount(() => {
       <div class="feature-grid">
         <article v-for="f in CORE_FEATURES" :key="f.title" class="feature-card">
           <div class="feature-media">
-            <img :src="f.image" :alt="f.title" loading="lazy" />
+            <img
+              :src="f.image"
+              :alt="f.title"
+              loading="lazy"
+              :style="{ objectPosition: f.imagePosition }"
+            />
           </div>
           <div class="feature-body">
             <h3 class="feature-title">
@@ -245,6 +291,7 @@ onBeforeUnmount(() => {
             <h4>腐竹 QQ</h4>
             <p class="contact-value mono">{{ SITE.ownerQq }}</p>
           </div>
+          <CopyButton :text="SITE.ownerQq" label="复制" />
         </div>
       </div>
       <!-- 三步加入：服务器无自研客户端，玩家走 Mojang 官方启动器路径 -->
@@ -380,7 +427,7 @@ onBeforeUnmount(() => {
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.06em;
-  color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.08);
   /* 提到图片层之上：状态屏右图、加入屏背景图不得再盖住 02/05 */
   z-index: 2;
   pointer-events: none;
@@ -430,11 +477,20 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
 }
+/* Hero 背景图：<img> 承载（解析 HTML 即发现，配合 fetchpriority=high 抢 LCP） */
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .hero-bg {
   position: absolute;
   inset: 0;
   z-index: 0;
-  /* 兜底色：若 --hero-img 缺失导致整条 background 声明失效，页面仍有底色而非空白 */
+  /* 兜底色：若下方 background 整条声明失效（极端降级），页面仍有底色而非空白 */
   background-color: var(--bg-0);
   background:
     /* 暖光只作为图片上的光效叠加 */
@@ -444,8 +500,7 @@ onBeforeUnmount(() => {
       rgba(8, 11, 10, 0.82) 0%,
       rgba(8, 11, 10, 0.55) 46%,
       rgba(8, 11, 10, 0.18) 100%
-    ),
-    /* 图片由模板内联传入（import 打包，hash + base 适配） */ var(--hero-img) center/cover no-repeat;
+    );
 }
 .hero-inner {
   position: relative;
@@ -538,6 +593,15 @@ onBeforeUnmount(() => {
   letter-spacing: 0.08em;
 }
 
+/* fullpage 默认给 .fp-overflow 加 fp-table（flex 列 + justify-content: center）。
+   内容高于视口时，居中溢出会把顶端推出画面且无法滚回（flex 居中溢出的「死区」，
+   Windows 常见视口 700–880px 下状态/关于屏标题就是这样被裁掉的）。
+   safe center：溢出时自动回退为顶部对齐，标题永远可见，多余部分屏内滚动。
+   不支持该关键字的老浏览器整条失效 → 保持默认 center，行为与以前一致。 */
+#fullpage :deep(.fp-overflow) {
+  justify-content: safe center;
+}
+
 /* ============================================================
    屏2 运行状态 / 屏3 关于：左右分栏 + 右侧图片满幅出血
    ============================================================ */
@@ -578,10 +642,13 @@ onBeforeUnmount(() => {
   min-width: 0;
   width: min(640px, 56%);
   margin-left: max(calc((100% - var(--container)) / 2), 24px);
-  padding: calc(var(--nav-h) + 36px) 40px 40px 24px;
+  /* 垂直内边距用 vh 流式：1080 高 ≈ 原 36/40px，矮视口自动收紧（配合下方紧凑模式） */
+  padding: calc(var(--nav-h) + 3.5vh) 40px max(2.5vh, 18px) 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  /* safe center：内容超高时改顶部对齐，标题不会被居中溢出推出画面 */
+  justify-content: safe center;
 }
 .split-media {
   position: relative;
@@ -719,6 +786,8 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   min-height: 400px;
+  /* 矮视口下收缩卡片高度，避免整屏内容超出视口 */
+  min-height: min(400px, 50vh);
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   background: var(--card-face);
@@ -972,6 +1041,10 @@ a.contact-card:hover {
 }
 .contact-docs .contact-value {
   color: var(--blue);
+}
+/* 腐竹 QQ 卡内的一键复制按钮贴右 */
+.contact-card :deep(.copy-btn) {
+  margin-left: auto;
 }
 .recruit-panel {
   padding: 16px 22px;
@@ -1339,6 +1412,186 @@ a.contact-card:hover {
   }
   .slogan-br {
     display: inline;
+  }
+}
+
+/* 低端设备无 backdrop-filter：回退为更实心的底色，避免毛玻璃失效后文字叠在透出内容上 */
+@supports not ((backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))) {
+  .hero-badge {
+    background: rgba(12, 17, 12, 0.95);
+  }
+  .hero-facts {
+    background: rgba(8, 11, 10, 0.94);
+  }
+  .join-card {
+    background: rgba(13, 16, 16, 0.97);
+  }
+}
+
+/* ============================================================
+   矮桌面视口（≤899px 高：1080p 带浏览器栏、125%/150% 缩放下的高分屏等）
+   收紧纵向预算，让每屏内容完整放进视口 —— 否则 fullpage 会启用
+   屏内滚动，并因居中溢出把屏幕标题推出画面（死区不可滚回）
+   ============================================================ */
+@media (min-width: 901px) and (max-height: 899px) {
+  .screen-kicker {
+    margin-bottom: 10px;
+  }
+  .screen-title {
+    font-size: clamp(24px, 3vw, 34px);
+  }
+  .screen-sub {
+    font-size: 13.5px;
+    margin-top: 6px;
+  }
+  .uptime-card {
+    margin-top: 10px;
+    padding: 14px 20px;
+  }
+  .uptime-label {
+    font-size: 10.5px;
+    margin-bottom: 10px;
+  }
+  .features-screen {
+    padding-top: calc(var(--nav-h) + 20px);
+    padding-bottom: 22px;
+  }
+  .join-screen {
+    padding-top: calc(var(--nav-h) + 18px);
+    padding-bottom: 18px;
+  }
+  .faq-layout {
+    padding-top: calc(var(--nav-h) + 18px);
+    padding-bottom: 22px;
+  }
+}
+
+/* ============================================================
+   超高分辨率适配（≥2880px 逻辑宽：4K 原生 100% 缩放 / 5K 等）
+   设计按 ~1080p 视口定稿，固定 px 文本在 4K 上会显得「缩在屏中央」；
+   此处等比放大最显眼的文本与留白，设计语言不变。
+   图片清晰度由 srcset 档位负责（3840w 档只在高分屏才下载）
+   ============================================================ */
+@media (min-width: 2880px) {
+  .hero-badge {
+    font-size: 20px;
+    padding: 12px 26px;
+    gap: 12px;
+  }
+  .hero-title {
+    font-size: clamp(96px, 5.4vw, 210px);
+  }
+  .hero-slogan {
+    font-size: clamp(24px, 1vw, 32px);
+  }
+  .hero-actions {
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .fact {
+    padding: 22px 46px;
+    gap: 14px;
+  }
+  .fact strong {
+    font-size: 24px;
+  }
+  .fact span {
+    font-size: 17px;
+  }
+  .screen-num {
+    font-size: clamp(140px, 7vw, 260px);
+  }
+  .screen-kicker {
+    font-size: 17px;
+    margin-bottom: 20px;
+  }
+  .screen-kicker::before {
+    width: 14px;
+    height: 14px;
+  }
+  .screen-title {
+    font-size: clamp(52px, 2.4vw, 88px);
+  }
+  .screen-sub {
+    font-size: 20px;
+    margin-top: 12px;
+  }
+  .split-copy {
+    width: min(880px, 52%);
+    padding: calc(var(--nav-h) + 48px) 56px 52px 32px;
+  }
+  .about-lead {
+    font-size: 20px;
+  }
+  .promise-card {
+    gap: 22px;
+    padding: 22px 30px;
+  }
+  .promise-icon {
+    width: 60px;
+    height: 60px;
+  }
+  .promise-card h3 {
+    font-size: 21px;
+  }
+  .promise-card p {
+    font-size: 18px;
+  }
+  .feature-body {
+    padding: 22px 26px 26px;
+  }
+  .feature-title {
+    font-size: 21px;
+    gap: 13px;
+  }
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .feature-desc {
+    font-size: 16.5px;
+  }
+  .feature-points li {
+    font-size: 16px;
+    gap: 10px;
+  }
+  .join-card {
+    padding: 30px 42px;
+    gap: 32px;
+  }
+  .join-kicker {
+    font-size: 16px;
+  }
+  .join-ip-value {
+    font-size: clamp(56px, 3.2vw, 96px);
+  }
+  .join-summary {
+    font-size: 18px;
+  }
+  .contact-row {
+    gap: 20px;
+  }
+  .contact-card {
+    padding: 22px 28px;
+    gap: 18px;
+    font-size: 18px;
+  }
+  .faq-q {
+    padding: 18px 26px;
+  }
+  .faq-q-text {
+    font-size: 19px;
+    gap: 16px;
+  }
+  .faq-index {
+    font-size: 15px;
+  }
+  .faq-toggle {
+    font-size: 24px;
+  }
+  .faq-a p {
+    padding: 0 26px 20px 63px;
+    font-size: 17px;
   }
 }
 </style>

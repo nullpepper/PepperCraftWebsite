@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useFullPageStore } from '../stores/fullpage'
 
 const fpStore = useFullPageStore()
@@ -20,15 +20,36 @@ const active = computed(() => fpStore.currentScreen.id)
 /** fullpage 用 transform 翻页，scrollY 恒为 0，因此还要看当前屏 */
 const scrolled = computed(() => pageScrolled.value || fpStore.hasLeftFirstScreen)
 
+/** 菜单打开时锁定页面滚动（移动端原生滚动模式下防止背后页面滚动） */
+watch(open, (v) => {
+  document.body.style.overflow = v ? 'hidden' : ''
+})
+
 function onScroll() {
   pageScrolled.value = window.scrollY > 24
+}
+
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape' && open.value) open.value = false
+}
+
+function onResize() {
+  // 回到桌面断点后菜单不可见：同步关闭并释放滚动锁
+  if (window.innerWidth > 960 && open.value) open.value = false
 }
 
 onMounted(() => {
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('resize', onResize)
+  document.addEventListener('keydown', onKeydown)
 })
-onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('resize', onResize)
+  document.removeEventListener('keydown', onKeydown)
+  document.body.style.overflow = ''
+})
 
 function go(id: string) {
   open.value = false
@@ -38,6 +59,8 @@ function go(id: string) {
 
 <template>
   <header class="nav" :class="{ 'nav-scrolled': scrolled }">
+    <!-- 遮罩：点菜单外区域即关闭（置于导航内容之前，层叠在面板下层） -->
+    <div v-if="open" class="nav-backdrop" aria-hidden="true" @click="open = false" />
     <div class="container nav-inner">
       <button class="nav-brand" @click="go('hero')">
         <span class="brand-text">
@@ -219,6 +242,29 @@ function go(id: string) {
     margin: 8px 0 0;
     text-align: center;
   }
+  /* 遮罩盖住导航以下全屏：菜单面板（header 内、更靠后）绘制在其上 */
+  .nav-backdrop {
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(5, 8, 7, 0.55);
+  }
+}
+@media (min-width: 961px) {
+  .nav-backdrop {
+    display: none;
+  }
+}
+/* 低端设备无 backdrop-filter：回退实心底色，避免菜单/导航文字叠在透出内容上 */
+@supports not ((backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))) {
+  .nav {
+    background: rgba(16, 19, 19, 0.97);
+  }
+  .nav-scrolled {
+    background: #101313;
+  }
 }
 .brand-pepper {
   color: var(--accent);
@@ -238,6 +284,17 @@ function go(id: string) {
   }
   .nav-links button {
     padding: 11px 12px;
+  }
+}
+
+/* 超高分辨率（≥2880px）：导航文本等比放大（--nav-h 由 main.css 同步加高到 80px） */
+@media (min-width: 2880px) {
+  .brand-text {
+    font-size: 24px;
+  }
+  .nav-links button {
+    padding: 10px 20px;
+    font-size: 18px;
   }
 }
 </style>

@@ -165,3 +165,58 @@ describe('服务器状态 store', () => {
     expect(wrapper.text()).not.toContain('维护中')
   })
 })
+
+// ===== 评审修复回归：主 API（uapis.cn）真实字段 =====
+// uapis.cn 返回 motd_clean / motd_html / max_players（顶层），没有 motd / description。
+describe('状态卡数据修复（主 API 真实字段）', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    vi.stubGlobal('fetch', vi.fn())
+  })
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  const uapisPayload = {
+    online: true,
+    players: 2,
+    max_players: 2333,
+    version: 'Velocity 1.7.2-26.2',
+    motd_clean: 'Pepper❤Craft | 26.1.2\n基于原版,忠于原版',
+  }
+
+  it('主 API 返回 motd_clean 时作为 MOTD 保存（修复：MOTD 恒为 null 显示代理名）', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => uapisPayload,
+    } as Response)
+
+    const { useStatusStore } = await import('../stores/status')
+    const store = useStatusStore()
+    await store.fetchStatus()
+
+    expect(store.motd).toBe('Pepper❤Craft | 26.1.2 基于原版,忠于原版')
+  })
+
+  it('主 API 返回 max_players 时更新人数上限（修复：恒显示初始 1000）', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => uapisPayload,
+    } as Response)
+
+    const { useStatusStore } = await import('../stores/status')
+    const store = useStatusStore()
+    await store.fetchStatus()
+
+    expect(store.maxPlayers).toBe(2333)
+  })
+
+  it('SITE.maxPlayers 与服务器容量一致（2333），且为 store 初始值来源', async () => {
+    const { SITE } = await import('../data/site')
+    expect(SITE.maxPlayers).toBe(2333)
+
+    const { useStatusStore } = await import('../stores/status')
+    const store = useStatusStore()
+    expect(store.maxPlayers).toBe(SITE.maxPlayers)
+  })
+})

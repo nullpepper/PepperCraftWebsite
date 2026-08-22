@@ -88,6 +88,13 @@ onBeforeUnmount(() => {
   letter-spacing: 0.14em;
 }
 
+/* 低端设备无 backdrop-filter：回退实心底色 */
+@supports not ((backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))) {
+  .unit {
+    background: rgba(10, 14, 12, 0.92);
+  }
+}
+
 @media (max-width: 520px) {
   .uptime {
     gap: 7px;
@@ -98,6 +105,32 @@ onBeforeUnmount(() => {
   }
   .num {
     font-size: 22px;
+  }
+}
+
+/* 矮桌面视口（≤899px 高）：收紧时长数字尺寸 */
+@media (min-width: 901px) and (max-height: 899px) {
+  .unit {
+    padding: 8px 6px;
+  }
+  .num {
+    font-size: clamp(26px, 3.2vw, 32px);
+  }
+  .label {
+    font-size: 10px;
+  }
+}
+
+/* 超高分辨率（≥2880px）：运行时长数字同比放大 */
+@media (min-width: 2880px) {
+  .unit {
+    padding: 16px 12px;
+  }
+  .num {
+    font-size: clamp(40px, 1.6vw, 64px);
+  }
+  .label {
+    font-size: 14px;
   }
 }
 </style>

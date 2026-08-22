@@ -210,4 +210,80 @@ onBeforeUnmount(() => {
     padding: 10px 16px;
   }
 }
+
+/* 矮桌面视口（≤899px 高）：收紧状态卡纵向尺寸，避免整屏内容超出视口 */
+@media (min-width: 901px) and (max-height: 899px) {
+  .status-card {
+    padding: 20px 26px;
+  }
+  .status-row {
+    font-size: 15.5px;
+    padding-bottom: 12px;
+    gap: 10px;
+  }
+  .status-motd {
+    font-size: 11px;
+  }
+  .status-headline {
+    padding: 12px 0 14px;
+  }
+  .status-num {
+    font-size: clamp(42px, 5vw, 58px);
+  }
+  .status-slash {
+    font-size: 17px;
+  }
+  .status-num-label {
+    font-size: 12px;
+  }
+  .status-body {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .status-item {
+    padding: 9px 13px;
+  }
+  .status-item .k {
+    font-size: 10.5px;
+  }
+  .status-item .v {
+    font-size: 13.5px;
+  }
+}
+
+/* 超高分辨率（≥2880px）：状态卡文本等比放大 */
+@media (min-width: 2880px) {
+  .status-card {
+    padding: 40px 44px;
+  }
+  .status-row {
+    font-size: 22px;
+    gap: 16px;
+  }
+  .status-motd {
+    font-size: 15px;
+  }
+  .status-num {
+    font-size: clamp(72px, 3vw, 110px);
+  }
+  .status-slash {
+    font-size: 26px;
+  }
+  .status-num-label {
+    font-size: 17px;
+  }
+  .status-body {
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .status-item {
+    padding: 16px 22px;
+  }
+  .status-item .k {
+    font-size: 14.5px;
+  }
+  .status-item .v {
+    font-size: 18.5px;
+  }
+}
 </style>

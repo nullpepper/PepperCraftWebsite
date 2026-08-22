@@ -68,6 +68,11 @@ const navs = [
       <div class="footer-bottom">
         <span>Copyright &copy; PepperCraft 2023-{{ year }}</span>
         <span>非官方 Minecraft 项目，与 Mojang 无关 · 完全遵守 EULA</span>
+        <span>
+          基于
+          <a href="https://alvarotrigo.com/fullPage/" target="_blank" rel="noopener">fullPage.js</a>
+          （GPLv3）构建
+        </span>
       </div>
     </div>
   </footer>

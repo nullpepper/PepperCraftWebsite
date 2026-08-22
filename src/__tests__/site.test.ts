@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { formatUptime } from '../utils/format'
 import { SCREENS } from '../stores/fullpage'
+import { SITE } from '../data/site'
 import HomeView from '../views/HomeView.vue'
 
 // mock fullpage.js：jsdom 中不需要真实滚动分页，只需验证结构
@@ -32,6 +33,14 @@ describe('PepperCraft 网站核心行为', () => {
     const uptime = formatUptime(new Date('2020-01-01T00:00:00+08:00'))
     expect(uptime.days).toBe(0)
     expect(uptime.seconds).toBe(0)
+  })
+
+  it('版本文案不与服务器现状冲突（真实版本以状态卡 MOTD 为准）', () => {
+    expect(SITE.version).toBe('最新高版本（跨版本支持）')
+  })
+
+  it('QQ 群链接为群分享卡片直链（qun.qq.com 首页需手动搜群号）', () => {
+    expect(SITE.qqGroupUrl).toContain('qun.qq.com/universal-share')
   })
 
   it('首页渲染原站全部关键信息', () => {

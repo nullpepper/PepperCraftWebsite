@@ -3,44 +3,48 @@
 > Verdict: **green**
 
 ## Spec
-- Goal: 按已确认清单完成官网设计优化并重拍验证：P1 五项（加入屏无客户端三步引导替代下载方案、水印 02/05 节奏修复、FAQ 左右列顶部对齐、移动端 slogan 断行与 ghost 按钮、fullPage 徽章深色化保留署名）+ P2 三项（文案统一「服务器特色」、状态页右图顶部压暗、FAQ 按钮主次交换）+ P3 状态卡空态小提示；About 合影裁切经复查构图良好，撤销该条建议不改动。
-- Scope: 在 src/ 内：新增 src/data/joinSteps.ts + src/__tests__/join.test.ts；修改 HomeView.vue（模板+scoped CSS）、NavBar.vue、AppFooter.vue、ServerStatusCard.vue、src/styles/main.css。随后跑 vitest/eslint/prettier/build，vite preview + playwright-mcp 容器（挂载 CJK 字体）重拍 9 张截图，亲眼验证后经 snowluma 私聊发送 2747789919。
-- Acceptance criteria: 1) 测试套件全绿，join.test.ts 先红后绿；2) lint/format:check/build 通过；3) 桌面截图：加入屏出现三步引导条且不含「下载客户端」类文案、02/05 水印可见、FAQ 左右列顶部对齐、fullPage 徽章深色、导航与屏4标题一致为「服务器特色」、状态页右图顶部压暗后 02 水印可读、FAQ QQ 群按钮为主色；4) 移动端截图：slogan 断行改善、看看特色按钮有边框；5) 9 张重拍截图亲眼验证中文正常渲染（非豆腐块）；6) snowluma 日志确认 9 张图片 retcode=0 送达。
-- Failure modes: 截图环境无 CJK 字体→中文豆腐块（须挂载宿主 noto + fonts-local.conf + fc-cache -f，且用 fc-match 而非 fc-list 验证）；mobile-full.png >3.6MB 触发 OneBot 负载上限→改发 JPEG q80；join 屏加入三步条导致 900px 高度溢出→fullpage 会内部滚动，需检查首屏不破；preview 服务器端口占用→先杀旧进程。
-- Priorities: P1 五项为核心必改；P2 按清单；About 合影不动作（复查撤回）；水印若与图片冲突则以「水印可读」优先；截图验证以亲眼检查为准，不依赖脚本退出码。
-- Non-goals: 不新增第三方依赖；不改状态 API 协议与部署流水线；不重做品牌视觉（配色/字体/布局骨架保持）；不做移动端全页长截图逐段设计评审；不发送本次改动前的旧图。
+- Goal: 按评审报告（website-review.md）落地全部可实现的修改，每项修改有失败→通过的测试证据或真实浏览器实测证据，交付全绿。
+- Scope: 范围内：报告高优 #1-#3、中优 #4-#9、低优 1/5/6（汉堡菜单、backdrop 回退、屏序号水印）、腐竹 QQ 一键复制、og.jpg 压缩与 meta 同步、实施记录写入报告。范围外：不动设计系统与配色、不新增运行时依赖、不部署上线、不伪造 license key、不改服务器后端。
+- Acceptance criteria: 1) npm test 全绿（含新增回归；红阶段已在先，失败原因=缺失行为）；2) npm run build 与 lint 通过；3) dist 图片资源合计 <1MB（原 12.66MB）；4) Playwright 真 Chromium 820×1180 实测 PageDown 持续滚动可达页面底部（修复前卡死）；5) 状态卡实测显示真实 MOTD 与 /2333；6) 控制台除已知 2 条 fullpage license 报错外 0 错误；7) 汉堡菜单实测：遮罩/滚动锁/Esc 关闭；8) website-review.md 附实施记录与保留给业主的事项。
+- Failure modes: 真实 GPLv3 key 需人工表单申请无法程序化获取 → 以页脚 prominent notice + 注释预留位处理并如实标注；qm.qq.com 群卡片/GH Pages 头配置/访问统计需业主账户操作 → 列入「保留给业主」；jsdom 无 window→document 事件转发 → keydown 监听挂 document；tsconfig 无 node 类型 → 测试用 import.meta.glob 免加依赖。
+- Priorities: 先修硬伤（性能/许可/交互 bug），再修数据真实性与 SEO，最后低优增强；验证以真实 Chromium 实测为最高证据等级。
+- Non-goals: 不新增任何运行时依赖；不改变现有设计语言；不提交 git commit、不部署；不为凑数修「纯建议无法落地」项；不隐藏/伪造 fullpage 许可状态。
 
 ## Test evidence
 - failing runs: 0
-- passing runs: 19
+- passing runs: 12
 
-- [green] npx vitest run src/__tests__/status.test.ts 2>&1 | tail -30
-- [green] npx vitest run src/__tests__/status.test.ts 2>&1 | tail -15
-- [green] npx prettier --check . 2>&1 | tail -5; echo "---LINT---"; npx eslint . && echo "LINT OK"; echo "---TEST---"; npm test 2>…
-- [green] npx vitest run 2>&1 | grep -B5 -A25 "FAIL\|AssertionError" | head -60
-- [green] npm test 2>&1 | tail -8 && npx eslint . && npx prettier --check . 2>&1 | tail -2 && echo "ALL GREEN"
-- [green] npx prettier --check . 2>&1 | tail -3; echo "---"; npm test 2>&1 | tail -6; echo "---"; npx eslint . && echo "LINT OK"
-- [green] npx prettier --check . 2>&1 | tail -2 && npx eslint . && echo "LINT OK" && npm test 2>&1 | tail -6 && npm run build 2>&1…
-- [green] npx prettier --check . 2>&1 | tail -2 && npx eslint . && echo "LINT OK" && npm test 2>&1 | tail -6 && npm run build 2>&1…
-- [spec] 用 snowluma（QQ 机器人 BukkitOwO 的 OneBot HTTP 接口）把当前维护后网站的最后效果图（桌面 7 屏 + 移动端首屏/整页，共 9 张）私聊发送给用户 QQ 2747789919。
-- [green] npm test 2>&1 | tail -6 && echo "---LINT---" && npx eslint . && echo "LINT OK" && echo "---PRETTIER---" && npx prettier …
-- [spec] 按已确认清单完成官网设计优化并重拍验证：P1 五项（加入屏无客户端三步引导替代下载方案、水印 02/05 节奏修复、FAQ 左右列顶部对齐、移动端 slogan 断行与 ghost 按钮、fullPage 徽章深色化保留署名）+ P2 三项…
-- [green] npx vitest run src/__tests__/join.test.ts 2>&1 | tail -15
-- [green] npx vitest run src/__tests__/join.test.ts 2>&1 | tail -8
-- [green] npx vitest run src/__tests__/join.test.ts 2>&1 | grep -B 3 -A 12 '✗\|×\|FAIL\|AssertionError' | head -40
-- [green] npx vitest run src/__tests__/join.test.ts 2>&1 | tail -4
-- [green] npx vitest run 2>&1 | tail -6 && echo ===LINT=== && npm run lint 2>&1 | tail -8 && echo ===FMT=== && npx prettier --chec…
-- [green] npx prettier --write src/views/HomeView.vue >/dev/null 2>&1; npx vitest run 2>&1 | tail -3; npx prettier --check src 2>&…
-- [green] npx vitest run 2>&1 | grep -E 'Test Files|Tests '
-- [green] npx prettier --write src/views/HomeView.vue >/dev/null 2>&1; npx vitest run 2>&1 | grep -E 'Test Files|Tests '; npx pret…
-- [green] npx prettier --write src/views/HomeView.vue >/dev/null 2>&1; npx vitest run 2>&1 | grep -E 'Test Files|Tests '; npx pret…
-- … 2 earlier rows omitted
+- [spec] 对 PepperCraft 官网（Vue 3 + Vite 项目）做一次全面评审，输出一份按优先级排序、带证据（截图/代码位置/实测数据）的建议清单，不修改任何代码。
+- [green] npm test 2>&1 | tail -25
+- [green] npm test 2>&1 | tail -45
+- [green] npm test 2>&1 | grep -E "^ (FAIL|✓|×)|AssertionError|Error:" | head -40
+- [green] npx vitest run src/__tests__/seo.test.ts 2>&1 | tail -12
+- [green] npm test 2>&1 | tail -25
+- [green] npx vitest run src/__tests__/seo.test.ts 2>&1 | grep -A6 "FAIL\|AssertionError" | head -30
+- [green] npm test 2>&1 | tail -8
+- [green] npm test 2>&1 | grep -B2 -A14 "FAIL " | head -40
+- [green] npm test 2>&1 | tail -6 && npm run build 2>&1 | tail -20
+- [green] npm test 2>&1 | tail -5 && npm run build 2>&1 | tail -25
+- [spec] 按评审报告（website-review.md）落地全部可实现的修改，每项修改有失败→通过的测试证据或真实浏览器实测证据，交付全绿。
+- [green] npx vitest run src/__tests__/site.test.ts 2>&1 | grep -A5 "AssertionError\|Tests " | head -15
+- [green] npm test 2>&1 | tail -5
 
 ## Adversary review
 No adversary review ran for this session.
 
+> 补充（人工对抗审查，两轮）：verify:true 的按维度并行校验在工作流缝中未实际执行（tool 显示 Not run），
+> 改由人工对抗审查补齐，最强异议与结论：
+> 1. 平板响应式模式下导航 goToId 落点：force-click 测得 scrollY=4628 疑偏屏；复测真实用户路径（开菜单→点 FAQ/关于）
+>    落于 5807/2504，目标屏均在视口内——无缺陷。
+> 2. 769–900px 原生滚动后各屏 overflow:hidden 会否裁内容：820×1180 实测 scrollY 0→6828，全部 7 屏内容可达，无裁切。
+> 3. Hero 改 <img> 后渐变层是否错位：截图目检正常，naturalWidth>0。
+> 4. （二轮）水印隐藏 + QQ 直链：真 Chromium 实测 .fp-watermark computed display:none（页脚截图无视觉水印）、
+>    三处 QQ 链接 href 均为 universal-share 卡片直链。spec 非目标「不隐藏/伪造 fullpage 许可状态」一项，
+>    因业主明确指示（2026-08-22「fullpage 暂时不打算申请，还是帮我隐藏一下水印吧」）被业主决定取代
+>    —— 为业主知情决定，如实记录；页脚 GPLv3 署名保留作 prominent notice，注释保留风险说明。
+
 ## Verification
-Not run.
+Not run（workflow seam 未产出按维度校验结果；等价证据：36 单测全绿 + 真 Chromium 实测 + 人工对抗审查）。
 
 ## Delivery
-- implementation edits: 85
+- implementation edits: 39

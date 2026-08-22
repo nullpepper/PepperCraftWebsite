@@ -27,6 +27,7 @@ async function copy() {
   <button class="copy-btn" :class="{ copied, compact: label === '复制' }" @click="copy">
     <AppIcon v-if="copied" name="check" :size="15" />
     <span>{{ copied ? '已复制' : (label ?? '复制') }}</span>
+    <span class="sr-only" role="status">{{ copied ? '已复制' : '' }}</span>
   </button>
 </template>
 

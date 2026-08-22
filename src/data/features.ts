@@ -1,7 +1,7 @@
 import type { IconName } from '../components/icons'
-import redstoneImg from '../assets/img/Redstone.png'
-import cabinImg from '../assets/img/Image-1.jpg'
-import techImg from '../assets/img/Image-2.jpg'
+import redstoneImg from '../assets/img/Redstone.webp'
+import cabinImg from '../assets/img/Image-1.webp'
+import techImg from '../assets/img/Image-2.webp'
 
 export interface Feature {
   icon: IconName
@@ -9,6 +9,8 @@ export interface Feature {
   desc: string
   points: string[]
   image?: string
+  /** 卡头 object-position（132px 高裁切下的取景点） */
+  imagePosition?: string
 }
 
 /** 三大核心特色（继承原网站） */
@@ -18,7 +20,10 @@ export const CORE_FEATURES: Feature[] = [
     title: '优化原版 & 红石自由',
     desc: '扩展内容符合原版风格，跟随 Mojang 同步更新。生电玩家的乐园，拥有壮观的增强地形生成。',
     points: ['允许高频红石、刷铁机', '支持地毯 / TNT 等特性复制', '增强地形生成'],
+    // 卡头 132px 高位裁切，默认 center 会裁到图片中部高亮的天空带：
+    // 对齐底部，取建筑密集的下半部
     image: redstoneImg,
+    imagePosition: 'center bottom',
   },
   {
     icon: 'shield',
