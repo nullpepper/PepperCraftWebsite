@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://web.pcraft.eu.org/sitemap.xml

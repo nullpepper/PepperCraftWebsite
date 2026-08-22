@@ -77,5 +77,10 @@ export const ICON_PATHS: Record<IconName, string[]> = {
   'arrow-up': ['M12 19V5', 'm6 11 6-6 6 6'],
   refresh: ['M20 12a8 8 0 1 1-2.6-5.9', 'M20 4.5V10h-5.5'],
   /** 官方文档 */
-  docs: ['M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z', 'M14 3v5h5', 'M9 13h6', 'M9 17h4'],
+  docs: [
+    'M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z',
+    'M14 3v5h5',
+    'M9 13h6',
+    'M9 17h4',
+  ],
 }

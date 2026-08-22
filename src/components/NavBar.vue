@@ -8,7 +8,7 @@ const links = [
   { id: 'hero', label: '首页' },
   { id: 'status', label: '运行状态' },
   { id: 'about', label: '关于' },
-  { id: 'features', label: '特色玩法' },
+  { id: 'features', label: '服务器特色' },
   { id: 'faq', label: 'FAQ' },
 ]
 
@@ -40,23 +40,37 @@ function go(id: string) {
   <header class="nav" :class="{ 'nav-scrolled': scrolled }">
     <div class="container nav-inner">
       <button class="nav-brand" @click="go('hero')">
-        <span class="brand-text"><span class="brand-pepper">Pepper</span><span class="brand-craft">Craft</span></span>
+        <span class="brand-text">
+          <span class="brand-pepper">Pepper</span>
+          <span class="brand-craft">Craft</span>
+        </span>
       </button>
 
-      <nav class="nav-links" :class="{ open }">
-        <a
+      <nav class="nav-links" :class="{ open }" id="nav-links">
+        <button
           v-for="l in links"
           :key="l.id"
+          type="button"
+          class="nav-link"
           :class="{ active: active === l.id }"
-          @click.prevent="go(l.id)"
+          @click="go(l.id)"
         >
           {{ l.label }}
-        </a>
-        <a class="nav-join-btn" @click.prevent="go('join')">立即加入</a>
+        </button>
+        <button type="button" class="nav-join-btn" @click="go('join')">立即加入</button>
       </nav>
 
-      <button class="nav-toggle" :class="{ open }" aria-label="菜单" @click="open = !open">
-        <span></span><span></span><span></span>
+      <button
+        class="nav-toggle"
+        :class="{ open }"
+        aria-label="菜单"
+        :aria-expanded="open"
+        aria-controls="nav-links"
+        @click="open = !open"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
     </div>
   </header>
@@ -109,22 +123,30 @@ function go(id: string) {
   align-items: center;
   gap: 4px;
 }
-.nav-links a {
+/* 站内跳转是按钮（无 href 的 <a> 不进 Tab 键序），样式沿用原链接外观 */
+.nav-links button {
   padding: 8px 16px;
   border-radius: 3px;
-  color: var(--text-2);
+  border: none;
+  background: none;
+  font-family: inherit;
   font-size: 14.5px;
   font-weight: 600;
+  color: var(--text-2);
   cursor: pointer;
   transition: all 0.2s;
 }
-.nav-links a:hover {
+.nav-links button:hover {
   color: var(--text-1);
   background: var(--bg-3);
 }
-.nav-links a.active {
+.nav-links button.active {
   color: var(--accent);
   background: var(--accent-dim);
+}
+.nav-links button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 .nav-join-btn {
   margin-left: 10px;
@@ -156,9 +178,15 @@ function go(id: string) {
   border-radius: 2px;
   transition: all 0.3s;
 }
-.nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.nav-toggle.open span:nth-child(2) { opacity: 0; }
-.nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.nav-toggle.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
 
 @media (max-width: 960px) {
   .nav-toggle {
@@ -183,7 +211,7 @@ function go(id: string) {
   .nav-links.open {
     transform: none;
   }
-  .nav-links a {
+  .nav-links button {
     padding: 12px 14px;
     font-size: 15.5px;
   }
@@ -192,12 +220,24 @@ function go(id: string) {
     text-align: center;
   }
 }
-.brand-pepper { color: var(--accent); }
-.brand-craft { color: var(--blue); }
+.brand-pepper {
+  color: var(--accent);
+}
+.brand-craft {
+  color: var(--blue);
+}
 @media (max-width: 600px) {
-  .nav-inner { padding: 0 16px; }
-  .brand-text { font-size: 17px; }
-  .nav-links { padding: 10px 16px 16px; }
-  .nav-links a { padding: 11px 12px; }
+  .nav-inner {
+    padding: 0 16px;
+  }
+  .brand-text {
+    font-size: 17px;
+  }
+  .nav-links {
+    padding: 10px 16px 16px;
+  }
+  .nav-links button {
+    padding: 11px 12px;
+  }
 }
 </style>

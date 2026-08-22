@@ -5,12 +5,18 @@ import 'fullpage.js/dist/fullpage.css'
 import { SITE } from '../data/site'
 import { CORE_FEATURES, FEATURE_TAGS, TECH_GUARANTEES } from '../data/features'
 import { FAQS } from '../data/faq'
+import { JOIN_STEPS } from '../data/joinSteps'
 import { useFullPageStore } from '../stores/fullpage'
 import UptimeCounter from '../components/UptimeCounter.vue'
 import CopyButton from '../components/CopyButton.vue'
 import ServerStatusCard from '../components/ServerStatusCard.vue'
 import AppFooter from '../components/AppFooter.vue'
 import AppIcon from '../components/AppIcon.vue'
+// 图片经 Vite 打包：内容 hash 破缓存 + base 路径自动适配（子路径部署不 404）
+import heroBg from '../assets/img/bg.png'
+import redstoneImg from '../assets/img/Redstone.png'
+import photoImg from '../assets/img/photo.png'
+import joinBg from '../assets/img/Residence.png'
 
 const fpStore = useFullPageStore()
 const faqOpen = ref<number | null>(0)
@@ -59,17 +65,20 @@ onBeforeUnmount(() => {
   <div id="fullpage">
     <!-- ============ 屏1 HERO ============ -->
     <section class="section fp-screen hero-screen">
-      <div class="hero-bg" />
+      <div class="hero-bg" :style="{ '--hero-img': `url(${heroBg})` }" />
       <span class="screen-num" aria-hidden="true">01</span>
       <div class="hero-inner">
         <p class="hero-badge">
-          <span class="dot dot-online" /> {{ SITE.tagline }}
+          <span class="dot dot-online" />
+          {{ SITE.tagline }}
         </p>
         <h1 class="hero-title">
-          <span class="t-pepper">Pepper</span><span class="t-craft">Craft</span>
+          <span class="t-pepper">Pepper</span>
+          <span class="t-craft">Craft</span>
         </h1>
         <p class="hero-slogan">
-          “{{ SITE.slogan }}” —— {{ SITE.subSlogan }}
+          “{{ SITE.slogan }}”<br class="slogan-br" aria-hidden="true" />
+          —— {{ SITE.subSlogan }}
         </p>
         <div class="hero-actions">
           <button class="btn btn-primary" @click="scrollTo('join')">立即加入</button>
@@ -83,7 +92,7 @@ onBeforeUnmount(() => {
           <span>日均在线</span>
         </div>
         <div class="fact">
-          <strong>3 年</strong>
+          <strong>{{ SITE.archivePromiseYears }} 年</strong>
           <span>存档承诺</span>
         </div>
         <div class="fact">
@@ -113,7 +122,7 @@ onBeforeUnmount(() => {
         </section>
       </div>
       <figure class="split-media">
-        <img :src="'/assets/img/Redstone.png'" alt="红石机械夜景" loading="lazy" />
+        <img :src="redstoneImg" alt="红石机械夜景" loading="lazy" />
         <div class="media-scrim" />
       </figure>
     </section>
@@ -126,12 +135,14 @@ onBeforeUnmount(() => {
           <p class="screen-kicker">关于我们 / ABOUT</p>
           <h2 class="screen-title">初心与承诺</h2>
         </header>
+        <!-- prettier-ignore -->
         <p class="about-lead">
           PepperCraft 是一个由 Minecraft 爱好者发起的高版本纯净生存公益服，
           致力于打造日均在线 {{ SITE.dailyOnline }} 的高质量社区。
           坚持<strong class="lead-strong">“基于原版，忠于原版”</strong>，
           用原版的机制与乐趣，构建一个能长久居住的方块世界。
         </p>
+        <!-- 上方 prettier-ignore：中文行内排版（坚持<strong>…</strong>，）不容格式化器插空格 -->
         <div class="promise-card">
           <span class="promise-icon"><AppIcon name="megaphone" :size="24" /></span>
           <div>
@@ -141,12 +152,13 @@ onBeforeUnmount(() => {
         </div>
         <ul class="tech-strip">
           <li v-for="t in TECH_GUARANTEES" :key="t" class="tech-chip">
-            <AppIcon name="check" :size="13" /> {{ t }}
+            <AppIcon name="check" :size="13" />
+            {{ t }}
           </li>
         </ul>
       </div>
       <figure class="split-media">
-        <img :src="'/assets/img/photo.png'" alt="玩家合影" loading="lazy" />
+        <img :src="photoImg" alt="玩家合影" loading="lazy" />
         <div class="media-scrim" />
       </figure>
     </section>
@@ -155,7 +167,7 @@ onBeforeUnmount(() => {
     <section class="section fp-screen features-screen">
       <span class="screen-num" aria-hidden="true">04</span>
       <header class="screen-head features-head">
-        <p class="screen-kicker">特色玩法 / FEATURES</p>
+        <p class="screen-kicker">玩法特色 / FEATURES</p>
         <h2 class="screen-title">服务器特色</h2>
       </header>
       <div class="feature-grid">
@@ -171,7 +183,8 @@ onBeforeUnmount(() => {
             <p class="feature-desc">{{ f.desc }}</p>
             <ul class="feature-points">
               <li v-for="p in f.points" :key="p">
-                <AppIcon name="check" :size="13" /> {{ p }}
+                <AppIcon name="check" :size="13" />
+                {{ p }}
               </li>
             </ul>
           </div>
@@ -195,7 +208,7 @@ onBeforeUnmount(() => {
 
     <!-- ============ 屏5 加入我们 ============ -->
     <section class="section fp-screen join-screen alt">
-      <div class="join-bg" />
+      <div class="join-bg" :style="{ '--join-img': `url(${joinBg})` }" />
       <span class="screen-num" aria-hidden="true">05</span>
       <header class="screen-head join-head">
         <p class="screen-kicker">加入我们 / JOIN</p>
@@ -207,7 +220,9 @@ onBeforeUnmount(() => {
           <span class="join-ip-value mono">{{ SITE.ip }}</span>
           <CopyButton :text="SITE.ip" label="复制 IP" />
         </div>
-        <p class="join-summary">{{ SITE.slogan }}。高版本纯净生存，欢迎建筑、生电和养老玩家入驻。</p>
+        <p class="join-summary">
+          {{ SITE.slogan }}。高版本纯净生存，欢迎建筑、生电和养老玩家入驻。
+        </p>
       </div>
       <div class="contact-row">
         <a class="contact-card" :href="SITE.qqGroupUrl" target="_blank" rel="noopener">
@@ -232,15 +247,36 @@ onBeforeUnmount(() => {
           </div>
         </div>
       </div>
+      <!-- 三步加入：服务器无自研客户端，玩家走 Mojang 官方启动器路径 -->
+      <div class="join-steps" aria-label="加入步骤">
+        <div v-for="(s, i) in JOIN_STEPS" :key="s.title" class="join-step">
+          <span class="join-step-num mono" aria-hidden="true">{{
+            String(i + 1).padStart(2, '0')
+          }}</span>
+          <div class="join-step-copy">
+            <h4>{{ s.title }}</h4>
+            <p>{{ s.desc }}</p>
+          </div>
+        </div>
+      </div>
       <div class="recruit-panel">
         <div class="recruit-heading">
           <span class="recruit-kicker">招募说明</span>
           <span class="recruit-rule">不定期活动 · 限定奖励</span>
         </div>
         <div class="recruit-grid">
-          <div><strong>新玩家</strong><p>活跃参与可获得钻石、称号等奖励。</p></div>
-          <div><strong>建筑玩家</strong><p>提供建材支持，参与主城维护与扩建。</p></div>
-          <div><strong>老玩家回归</strong><p>满足历史贡献、建筑或事件记忆等条件，可申请回归补偿。</p></div>
+          <div>
+            <strong>新玩家</strong>
+            <p>活跃参与可获得钻石、称号等奖励。</p>
+          </div>
+          <div>
+            <strong>建筑玩家</strong>
+            <p>提供建材支持，参与主城维护与扩建。</p>
+          </div>
+          <div>
+            <strong>老玩家回归</strong>
+            <p>满足历史贡献、建筑或事件记忆等条件，可申请回归补偿。</p>
+          </div>
         </div>
       </div>
     </section>
@@ -254,29 +290,40 @@ onBeforeUnmount(() => {
             <p class="screen-kicker">FAQ</p>
             <h2 class="screen-title">常见问题</h2>
           </header>
-          <p class="faq-more">
-            没找到答案？加交流群直接问，或在文档站检索。
-          </p>
+          <p class="faq-more">没找到答案？加交流群直接问，或在文档站检索。</p>
           <div class="faq-actions">
-            <a class="btn btn-primary" :href="SITE.docsUrl" target="_blank" rel="noopener">文档站入口</a>
-            <a class="btn btn-ghost" :href="SITE.qqGroupUrl" target="_blank" rel="noopener">
-              QQ 群 <span class="mono">{{ SITE.qqGroup }}</span>
+            <a class="btn btn-primary" :href="SITE.qqGroupUrl" target="_blank" rel="noopener">
+              QQ 群
+              <span class="mono">{{ SITE.qqGroup }}</span>
+            </a>
+            <a class="btn btn-ghost" :href="SITE.docsUrl" target="_blank" rel="noopener">
+              文档站入口
             </a>
           </div>
         </div>
         <div class="faq-list">
-          <div
-            v-for="(f, i) in FAQS"
-            :key="f.q"
-            class="faq-item"
-            :class="{ open: faqOpen === i }"
-          >
-            <button class="faq-q" @click="faqOpen = faqOpen === i ? null : i">
-              <span class="faq-q-text"><span class="faq-index mono">{{ String(i + 1).padStart(2, '0') }}</span>{{ f.q }}</span>
-              <span class="faq-toggle" :class="{ open: faqOpen === i }">+</span>
+          <div v-for="(f, i) in FAQS" :key="f.q" class="faq-item" :class="{ open: faqOpen === i }">
+            <button
+              class="faq-q"
+              :id="'faq-q-' + i"
+              :aria-expanded="faqOpen === i"
+              :aria-controls="'faq-a-' + i"
+              @click="faqOpen = faqOpen === i ? null : i"
+            >
+              <span class="faq-q-text">
+                <span class="faq-index mono">{{ String(i + 1).padStart(2, '0') }}</span>
+                {{ f.q }}
+              </span>
+              <span class="faq-toggle" :class="{ open: faqOpen === i }" aria-hidden="true">+</span>
             </button>
             <Transition name="faq-expand">
-              <div v-if="faqOpen === i" class="faq-a-shell">
+              <div
+                v-if="faqOpen === i"
+                class="faq-a-shell"
+                :id="'faq-a-' + i"
+                role="region"
+                :aria-labelledby="'faq-q-' + i"
+              >
                 <div class="faq-a">
                   <p>{{ f.a }}</p>
                 </div>
@@ -313,7 +360,13 @@ onBeforeUnmount(() => {
 
 .alt {
   background:
-    linear-gradient(180deg, var(--bg-1), rgba(20, 24, 23, 0.4) 30%, rgba(20, 24, 23, 0.4) 70%, var(--bg-1)),
+    linear-gradient(
+      180deg,
+      var(--bg-1),
+      rgba(20, 24, 23, 0.4) 30%,
+      rgba(20, 24, 23, 0.4) 70%,
+      var(--bg-1)
+    ),
     var(--bg-0);
 }
 
@@ -328,6 +381,8 @@ onBeforeUnmount(() => {
   line-height: 1;
   letter-spacing: -0.06em;
   color: rgba(255, 255, 255, 0.05);
+  /* 提到图片层之上：状态屏右图、加入屏背景图不得再盖住 02/05 */
+  z-index: 2;
   pointer-events: none;
   user-select: none;
 }
@@ -379,11 +434,18 @@ onBeforeUnmount(() => {
   position: absolute;
   inset: 0;
   z-index: 0;
+  /* 兜底色：若 --hero-img 缺失导致整条 background 声明失效，页面仍有底色而非空白 */
+  background-color: var(--bg-0);
   background:
     /* 暖光只作为图片上的光效叠加 */
     radial-gradient(ellipse 60% 50% at 78% 38%, var(--warm-glow), transparent 65%),
-    linear-gradient(90deg, rgba(8, 11, 10, 0.82) 0%, rgba(8, 11, 10, 0.55) 46%, rgba(8, 11, 10, 0.18) 100%),
-    url('/assets/img/bg.png') center/cover no-repeat;
+    linear-gradient(
+      90deg,
+      rgba(8, 11, 10, 0.82) 0%,
+      rgba(8, 11, 10, 0.55) 46%,
+      rgba(8, 11, 10, 0.18) 100%
+    ),
+    /* 图片由模板内联传入（import 打包，hash + base 适配） */ var(--hero-img) center/cover no-repeat;
 }
 .hero-inner {
   position: relative;
@@ -428,6 +490,12 @@ onBeforeUnmount(() => {
   color: var(--text-2);
   font-weight: 300;
   letter-spacing: 0.01em;
+  /* 中文短句按语义断行，避免「生电 / 融合」被孤字拆分 */
+  text-wrap: balance;
+}
+/* 移动端专属断行点：桌面单行隐藏，窄屏把「—— 说明」另起一行 */
+.slogan-br {
+  display: none;
 }
 .hero-actions {
   display: flex;
@@ -531,6 +599,13 @@ onBeforeUnmount(() => {
   position: absolute;
   inset: 0;
   background:
+    linear-gradient(90deg, var(--bg-0) 0%, rgba(13, 16, 16, 0.25) 22%, transparent 45%),
+    linear-gradient(to top, rgba(8, 11, 10, 0.85), transparent 42%);
+}
+/* 状态屏右图：天空过亮导致视觉重心上浮，顶部叠压暗（同时让 02 水印可读） */
+.status-screen .media-scrim {
+  background:
+    linear-gradient(to bottom, rgba(8, 11, 10, 0.55), transparent 32%),
     linear-gradient(90deg, var(--bg-0) 0%, rgba(13, 16, 16, 0.25) 22%, transparent 45%),
     linear-gradient(to top, rgba(8, 11, 10, 0.85), transparent 42%);
 }
@@ -649,12 +724,17 @@ onBeforeUnmount(() => {
   background: var(--card-face);
   box-shadow: var(--card-lift);
   overflow: hidden;
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 .feature-card:hover {
   transform: translateY(-4px);
   border-color: var(--accent-glow);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 22px 48px -14px rgba(0, 0, 0, 0.75),
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 22px 48px -14px rgba(0, 0, 0, 0.75),
     0 0 0 1px var(--accent-glow);
 }
 .feature-media {
@@ -738,7 +818,9 @@ onBeforeUnmount(() => {
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-soft);
   background: rgba(27, 33, 31, 0.72);
-  transition: border-color 0.25s, transform 0.25s;
+  transition:
+    border-color 0.25s,
+    transform 0.25s;
 }
 .tag-card:hover {
   transform: translateY(-2px);
@@ -786,7 +868,9 @@ onBeforeUnmount(() => {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: url('/assets/img/Residence.png') center/cover no-repeat;
+  /* 兜底色：--join-img 缺失时仍保留区块底色 */
+  background-color: var(--bg-0);
+  background: var(--join-img) center/cover no-repeat;
   opacity: 0.07;
   filter: grayscale(0.35);
 }
@@ -794,7 +878,13 @@ onBeforeUnmount(() => {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, var(--bg-0) 0%, transparent 30%, transparent 68%, var(--bg-0) 100%);
+  background: linear-gradient(
+    to bottom,
+    var(--bg-0) 0%,
+    transparent 30%,
+    transparent 68%,
+    var(--bg-0) 100%
+  );
 }
 .join-screen > * {
   position: relative;
@@ -922,6 +1012,41 @@ a.contact-card:hover {
   margin-top: 3px;
 }
 
+/* 三步加入引导：无自研客户端，走官方启动器路径的步骤条 */
+.join-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.join-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  background: rgba(20, 24, 23, 0.88);
+}
+.join-step-num {
+  flex: 0 0 auto;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  padding-top: 2px;
+  color: rgba(141, 204, 98, 0.45);
+}
+.join-step-copy h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-1);
+  margin-bottom: 4px;
+}
+.join-step-copy p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-3);
+}
+
 /* ============================================================
    屏6 FAQ：左标题右风琴，8 条全量渲染
    ============================================================ */
@@ -944,7 +1069,9 @@ a.contact-card:hover {
 .faq-copy {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* 顶部对齐而非居中：右列表高（~480px）远大于左列内容（~210px），
+     两列各自居中会让左列标题外悬在列表中部以下，视觉错位 */
+  justify-content: flex-start;
   align-items: flex-start;
 }
 .faq-more {
@@ -1033,7 +1160,9 @@ a.contact-card:hover {
 .faq-expand-enter-active,
 .faq-expand-leave-active {
   overflow: hidden;
-  transition: grid-template-rows 0.24s ease, opacity 0.2s ease;
+  transition:
+    grid-template-rows 0.24s ease,
+    opacity 0.2s ease;
 }
 .faq-expand-enter-from,
 .faq-expand-leave-to {
@@ -1104,6 +1233,9 @@ a.contact-card:hover {
   .recruit-grid {
     grid-template-columns: 1fr;
     gap: 10px;
+  }
+  .join-steps {
+    grid-template-columns: 1fr;
   }
   .faq-layout {
     grid-template-columns: 1fr;
@@ -1197,6 +1329,9 @@ a.contact-card:hover {
   }
   .screen-num {
     top: 12px;
+  }
+  .slogan-br {
+    display: inline;
   }
 }
 </style>

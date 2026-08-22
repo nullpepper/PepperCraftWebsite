@@ -21,10 +21,15 @@ describe('全屏分页下的站内导航', () => {
     useFullPageStore().setApi({ moveTo })
 
     const wrapper = mount(AppFooter)
-    const links = wrapper.findAll('.footer-links a')
+    const links = wrapper.findAll('.footer-links button')
     const about = links.find((a) => a.text() === '关于')!
     const join = links.find((a) => a.text() === '加入我们')!
     const top = links.find((a) => a.text() === '返回顶部')!
+
+    // 无障碍回归：站内跳转必须是可聚焦的 button（无 href 的 <a> 不进 Tab 键序）
+    expect(about.element.tagName).toBe('BUTTON')
+    expect(join.element.tagName).toBe('BUTTON')
+    expect(top.element.tagName).toBe('BUTTON')
 
     await about.trigger('click')
     expect(moveTo).toHaveBeenLastCalledWith(indexOf('about'))

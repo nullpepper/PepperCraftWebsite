@@ -1,0 +1,6 @@
+node_modules
+dist
+.build
+package-lock.json
+# 交付产物文档（doublecheck 工具生成，不经 prettier）
+doublecheck-*.md

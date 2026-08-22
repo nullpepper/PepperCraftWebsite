@@ -56,7 +56,8 @@
        --font-mono  唯一职责是机器可读数据：IP、人数、运行时长、版本号、
                     QQ 号、eyebrow 标签、屏序号。Consolas(Win)/SF Mono(mac)
                     必然存在，家族对比免费拿到，且语义正确。 */
-  --font-sans: 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', 'Segoe UI', system-ui, -apple-system,
+  --font-sans:
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', 'Segoe UI', system-ui, -apple-system,
     sans-serif;
   --font-mono: ui-monospace, 'Cascadia Code', Consolas, 'SF Mono', Menlo, 'Courier New', monospace;
 
@@ -187,7 +188,10 @@ img {
   border-radius: 10px;
   padding: 26px;
   box-shadow: var(--card-lift);
-  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    border-color 0.3s,
+    box-shadow 0.3s;
 }
 /* 顶部高光细线，给暗底卡片一点材质 */
 .card::before {
@@ -202,7 +206,9 @@ img {
 .card:hover {
   transform: translateY(-4px);
   border-color: rgba(141, 204, 98, 0.45);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 24px 50px -14px rgba(0, 0, 0, 0.8),
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 24px 50px -14px rgba(0, 0, 0, 0.8),
     0 0 0 1px rgba(141, 204, 98, 0.12);
 }
 
@@ -235,7 +241,9 @@ img {
 }
 .dot-online {
   background: var(--ok);
-  box-shadow: 0 0 0 4px rgba(88, 193, 105, 0.18), 0 0 12px var(--ok);
+  box-shadow:
+    0 0 0 4px rgba(88, 193, 105, 0.18),
+    0 0 12px var(--ok);
   animation: pulse 2s infinite;
 }
 .dot-offline {
@@ -254,6 +262,17 @@ img {
 }
 
 /* ---------- 动画 ---------- */
+/* 尊重系统「减少动态效果」：关闭动画/过渡/平滑滚动（含 fullpage 翻页过渡） */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 @keyframes float {
   0%,
   100% {
@@ -291,4 +310,26 @@ img {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
+}
+
+/* ---------- fullPage.js GPL 署名徽章 ----------
+   保留合规署名（GPLv3 要求），仅把默认白底黑字深色化融入主题 */
+body .fp-watermark a {
+  color: var(--text-2) !important;
+  background: rgba(20, 24, 23, 0.92) !important;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-family: var(--font-sans);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* 移动端 ghost 按钮：深色背景上给出清晰边界，避免「像纯文字」 */
+@media (max-width: 600px) {
+  .btn-ghost {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(8, 11, 10, 0.35);
+  }
 }

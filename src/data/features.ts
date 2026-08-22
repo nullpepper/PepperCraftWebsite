@@ -1,4 +1,7 @@
 import type { IconName } from '../components/icons'
+import redstoneImg from '../assets/img/Redstone.png'
+import cabinImg from '../assets/img/Image-1.jpg'
+import techImg from '../assets/img/Image-2.jpg'
 
 export interface Feature {
   icon: IconName
@@ -15,7 +18,7 @@ export const CORE_FEATURES: Feature[] = [
     title: '优化原版 & 红石自由',
     desc: '扩展内容符合原版风格，跟随 Mojang 同步更新。生电玩家的乐园，拥有壮观的增强地形生成。',
     points: ['允许高频红石、刷铁机', '支持地毯 / TNT 等特性复制', '增强地形生成'],
-    image: 'assets/img/Redstone.png',
+    image: redstoneImg,
   },
   {
     icon: 'shield',
@@ -23,7 +26,7 @@ export const CORE_FEATURES: Feature[] = [
     desc: '没有臃肿的虚拟货币，没有复杂的地皮系统。只有最纯粹的方块世界和最纯正的生存挑战。',
     points: ['原版钻石实体货币', '家园 / 联盟双轨领地', '可扩展公会系统'],
     // 原为 Residence.png，画面偏灰暗、辨识度低，换成夜景木屋（能体现「能长久居住」）
-    image: 'assets/img/Image-1.jpg',
+    image: cabinImg,
   },
   {
     icon: 'wrench',
@@ -31,7 +34,7 @@ export const CORE_FEATURES: Feature[] = [
     desc: '腐竹拥有 3 年以上专业开发经验，服内插件自研率超 18.5%。',
     points: ['本地 / 异地双重备份', '付费级混合反作弊', '强制正版验证，完全遵守官方 EULA'],
     // 原为 photo.png，该图移作「关于」屏满幅主视觉
-    image: 'assets/img/Image-2.jpg',
+    image: techImg,
   },
 ]
 

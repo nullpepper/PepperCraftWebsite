@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, onBeforeUnmount } from 'vue'
-import { useStatusStore } from '../stores/status'
+import { useStatusStore, type ServerStatus } from '../stores/status'
 import { SITE } from '../data/site'
 import AppIcon from './AppIcon.vue'
 
@@ -10,18 +10,15 @@ const { status, players, maxPlayers, version, motd, lastCheck, checking } = stor
 
 let timer: number | null = null
 
-const statusText = computed(() => {
-  switch (status.value) {
-    case 'loading':
-      return '正在获取…'
-    case 'online':
-      return '在线'
-    case 'offline':
-      return '离线'
-    case 'error':
-      return '维护中'
-  }
-})
+const STATUS_TEXT: Record<ServerStatus, string> = {
+  loading: '正在获取…',
+  online: '在线',
+  offline: '离线',
+  // 双状态 API 均不可达 ≠ 服务器在维护，措辞保持诚实
+  error: '状态暂不可用',
+}
+
+const statusText = computed(() => STATUS_TEXT[status.value])
 
 onMounted(() => {
   store.fetchStatus()
@@ -39,7 +36,7 @@ onBeforeUnmount(() => {
         class="dot"
         :class="status === 'online' ? 'dot-online' : status === 'offline' ? 'dot-offline' : ''"
       />
-      <span class="status-text">{{ statusText }}</span>
+      <span class="status-text" aria-live="polite">{{ statusText }}</span>
       <span class="status-motd mono">{{ motd || version || '等待服务器返回' }}</span>
     </div>
 
@@ -47,7 +44,9 @@ onBeforeUnmount(() => {
     <div class="status-headline">
       <span class="status-num mono">{{ status === 'online' ? (players ?? '?') : '—' }}</span>
       <span class="status-slash mono">/ {{ maxPlayers }}</span>
-      <span class="status-num-label">当前在线玩家</span>
+      <span class="status-num-label">{{
+        status === 'online' && players === 0 ? '当前在线玩家 · 等待玩家上线' : '当前在线玩家'
+      }}</span>
     </div>
 
     <div class="status-body">
@@ -169,21 +168,45 @@ onBeforeUnmount(() => {
   justify-content: center;
 }
 @media (max-width: 900px) {
-  .status-card { padding: 24px; }
-  .status-num { font-size: 52px; }
+  .status-card {
+    padding: 24px;
+  }
+  .status-num {
+    font-size: 52px;
+  }
 }
 @media (max-width: 560px) {
-  .status-card { padding: 20px; border-radius: 8px; }
-  .status-row { flex-wrap: wrap; gap: 8px; }
-  .status-motd { margin-left: 0; max-width: 100%; }
-  .status-headline { padding: 16px 0 18px; }
-  .status-num { font-size: 46px; }
-  .status-num-label { margin-left: 0; width: 100%; }
+  .status-card {
+    padding: 20px;
+    border-radius: 8px;
+  }
+  .status-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .status-motd {
+    margin-left: 0;
+    max-width: 100%;
+  }
+  .status-headline {
+    padding: 16px 0 18px;
+  }
+  .status-num {
+    font-size: 46px;
+  }
+  .status-num-label {
+    margin-left: 0;
+    width: 100%;
+  }
   .status-body {
     grid-template-columns: 1fr;
     gap: 9px;
   }
-  .status-item { padding: 10px 13px; }
-  .retry { padding: 10px 16px; }
+  .status-item {
+    padding: 10px 13px;
+  }
+  .retry {
+    padding: 10px 16px;
+  }
 }
 </style>

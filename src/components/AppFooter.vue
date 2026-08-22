@@ -16,7 +16,7 @@ function go(id: string) {
 
 const navs = [
   { id: 'about', label: '关于' },
-  { id: 'features', label: '特色玩法' },
+  { id: 'features', label: '服务器特色' },
   { id: 'join', label: '加入我们' },
 ]
 </script>
@@ -27,7 +27,8 @@ const navs = [
       <div class="footer-brand">
         <h4 class="footer-logo">
           <AppIcon name="cube" :size="26" />
-          <span class="fl-pepper">Pepper</span><span class="fl-craft">Craft</span>
+          <span class="fl-pepper">Pepper</span>
+          <span class="fl-craft">Craft</span>
         </h4>
         <p class="footer-tag">{{ SITE.slogan }} · {{ SITE.tagline }}</p>
         <div class="footer-ip">
@@ -40,8 +41,10 @@ const navs = [
       <div class="footer-links">
         <div class="footer-col">
           <h5>导航</h5>
-          <a v-for="n in navs" :key="n.id" @click.prevent="go(n.id)">{{ n.label }}</a>
-          <a @click.prevent="go('hero')">返回顶部</a>
+          <button type="button" v-for="n in navs" :key="n.id" @click="go(n.id)">
+            {{ n.label }}
+          </button>
+          <button type="button" @click="go('hero')">返回顶部</button>
         </div>
         <div class="footer-col">
           <h5>联系</h5>
@@ -51,7 +54,10 @@ const navs = [
         </div>
         <div class="footer-col">
           <h5>服务器</h5>
-          <span>开服于 <em class="mono">{{ SITE.serverStart }}</em></span>
+          <span>
+            开服于
+            <em class="mono">{{ SITE.serverStart }}</em>
+          </span>
           <span>{{ SITE.version }}</span>
           <span>{{ SITE.difficulty }} · {{ SITE.gameMode }}</span>
         </div>
@@ -101,8 +107,12 @@ const navs = [
 .footer-logo svg {
   margin-right: 10px;
 }
-.fl-pepper { color: var(--accent); }
-.fl-craft { color: var(--blue); }
+.fl-pepper {
+  color: var(--accent);
+}
+.fl-craft {
+  color: var(--blue);
+}
 .footer-tag {
   color: var(--text-2);
   font-size: 14px;
@@ -144,20 +154,38 @@ const navs = [
   font-weight: 700;
 }
 .footer-col a,
+.footer-col button,
 .footer-col span {
   display: block;
   font-size: 13.5px;
   line-height: 1.5;
   margin-bottom: 11px;
 }
-.footer-col a {
+.footer-col a,
+.footer-col button {
   color: var(--text-2);
   cursor: pointer;
-  transition: color 0.2s, transform 0.2s;
+  transition:
+    color 0.2s,
+    transform 0.2s;
 }
-.footer-col a:hover {
+/* 站内跳转是按钮（无 href 的 <a> 不可聚焦），重置浏览器默认按钮样式 */
+.footer-col button {
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-weight: 400;
+  text-align: left;
+}
+.footer-col a:hover,
+.footer-col button:hover {
   color: var(--accent);
   transform: translateX(3px);
+}
+.footer-col button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 .footer-col span {
   color: var(--text-3);
@@ -186,13 +214,21 @@ const navs = [
   }
 }
 @media (max-width: 600px) {
-  .site-footer { padding-top: 40px; }
-  .footer-grid { padding-bottom: 28px; }
+  .site-footer {
+    padding-top: 40px;
+  }
+  .footer-grid {
+    padding-bottom: 28px;
+  }
   .footer-links {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
   }
-  .footer-logo { font-size: 23px; }
-  .footer-bottom { padding: 16px 0 22px; }
+  .footer-logo {
+    font-size: 23px;
+  }
+  .footer-bottom {
+    padding: 16px 0 22px;
+  }
 }
 </style>

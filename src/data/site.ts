@@ -7,7 +7,6 @@ export const SITE = {
   description:
     'PepperCraft 是一个由 Minecraft 爱好者发起的高版本纯净生存公益服，致力于打造日均在线 30+ 的高质量社区。',
   ip: 'pepper.ltd',
-  ipPort: 'pepper.ltd',
   qqGroup: '754966689',
   /** QQ 群主页（群号搜索入口） */
   qqGroupUrl: 'https://qun.qq.com/',

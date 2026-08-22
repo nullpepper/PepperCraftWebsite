@@ -1,19 +1,19 @@
 # Doublecheck spec
 
 ## Goal
-在 ~/projects/PepperCraftWeb（GitHub 仓库 nullpepper/PepperCraftWebsite 的本地克隆）中用 Vue 3 + Vite + TypeScript + Vue Router + Pinia 重写 Pepper Craft 官网：继承原站全部信息（简介/特色/状态/联系方式），从 docker 容器 mc-peppercraft（即用户所称 PepperCraft-MC）与 PepperServer-Document 文档仓库提取真实服务器资料丰富内容，并创造性地引入新功能，最终交付可本地构建运行（npm run dev/build 通过）的现代化网站。
+按已确认清单完成官网设计优化并重拍验证：P1 五项（加入屏无客户端三步引导替代下载方案、水印 02/05 节奏修复、FAQ 左右列顶部对齐、移动端 slogan 断行与 ghost 按钮、fullPage 徽章深色化保留署名）+ P2 三项（文案统一「服务器特色」、状态页右图顶部压暗、FAQ 按钮主次交换）+ P3 状态卡空态小提示；About 合影裁切经复查构图良好，撤销该条建议不改动。
 
 ## Scope
-范围内：网站前端重写（页面、组件、样式、数据模块、路由、状态管理）；使用原站图片资源（public/assets/img）；从 docker 容器读取的公开服务器信息（玩家排行、城镇名单、经济数据、插件清单、版本、配置摘要）；自研插件生态展示（GitHub 公开仓库信息）。范围外：不修改服务器/插件/MariaDB 数据；不实现后端服务；不做涉及隐私的玩家数据展示（QQ 号、IP）；不部署到生产（仅本地构建与预览验证，附部署说明）。
+在 src/ 内：新增 src/data/joinSteps.ts + src/__tests__/join.test.ts；修改 HomeView.vue（模板+scoped CSS）、NavBar.vue、AppFooter.vue、ServerStatusCard.vue、src/styles/main.css。随后跑 vitest/eslint/prettier/build，vite preview + playwright-mcp 容器（挂载 CJK 字体）重拍 9 张截图，亲眼验证后经 snowluma 私聊发送 2747789919。
 
 ## Acceptance criteria
-1) npm run build 成功产出 dist/，npm run preview 或 dev 可访问；2) 首页包含原站全部关键信息：IP pepper.ltd、开服时间 2023-02-20、3 年存档承诺、三大特色、QQ 群 754966689、腐竹 QQ 2747789919、官方文档 docs.pepper.ltd；3) 实时状态页能通过在线 API 拉取人数（失败时有优雅降级显示）；4) 玩家排行/城镇/经济数据来自容器真实数据且标注快照时间；5) 新增至少 3 项原站没有的功能（运行时长倒计时、联盟展示、自研插件画廊、命令速查等）；6) 移动端响应式可用；7) git 提交记录完整。
+1) 测试套件全绿，join.test.ts 先红后绿；2) lint/format:check/build 通过；3) 桌面截图：加入屏出现三步引导条且不含「下载客户端」类文案、02/05 水印可见、FAQ 左右列顶部对齐、fullPage 徽章深色、导航与屏4标题一致为「服务器特色」、状态页右图顶部压暗后 02 水印可读、FAQ QQ 群按钮为主色；4) 移动端截图：slogan 断行改善、看看特色按钮有边框；5) 9 张重拍截图亲眼验证中文正常渲染（非豆腐块）；6) snowluma 日志确认 9 张图片 retcode=0 送达。
 
 ## Failure modes
-在线状态 API 不可达/跨域失败 → 显示"维护中/离线"并给出重试按钮，不阻塞页面；图片资源缺失 → 显示占位背景与 alt 文本；数据快照过期 → 页面标注抓取时间并说明为静态快照；npm 依赖安装失败 → 锁定版本重试；构建类型错误 → 修正后重跑直到通过。
+截图环境无 CJK 字体→中文豆腐块（须挂载宿主 noto + fonts-local.conf + fc-cache -f，且用 fc-match 而非 fc-list 验证）；mobile-full.png >3.6MB 触发 OneBot 负载上限→改发 JPEG q80；join 屏加入三步条导致 900px 高度溢出→fullpage 会内部滚动，需检查首屏不破；preview 服务器端口占用→先杀旧进程。
 
 ## Priorities
-信息完整性 > 视觉效果 > 性能细节；静态快照数据优先保证真实准确，实时数据允许降级；中文为主要语言；优先交付可运行产物，其次优化细节。
+P1 五项为核心必改；P2 按清单；About 合影不动作（复查撤回）；水印若与图片冲突则以「水印可读」优先；截图验证以亲眼检查为准，不依赖脚本退出码。
 
 ## Non-goals
-用户已睡觉无法问答（等价"别问，直接做"，按其指令执行）；不部署生产服务器；不展示玩家真实 IP/QQ 等隐私信息；不做 SSR；不引入重型 UI 框架（用轻量自定义 CSS）；不修改原仓库 git 历史（旧版本保留在 git 历史中）。
+不新增第三方依赖；不改状态 API 协议与部署流水线；不重做品牌视觉（配色/字体/布局骨架保持）；不做移动端全页长截图逐段设计评审；不发送本次改动前的旧图。

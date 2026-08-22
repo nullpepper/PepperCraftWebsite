@@ -12,7 +12,7 @@ class IntersectionObserverMock {
     // 立即触发一次回调，模拟元素已在视口内（让 reveal 内容直接可见）
     this.callback(
       [{ isIntersecting: true, target: el } as IntersectionObserverEntry],
-      this as unknown as IntersectionObserver
+      this as unknown as IntersectionObserver,
     )
   }
 

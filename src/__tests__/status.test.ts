@@ -1,7 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
+import { mount, flushPromises } from '@vue/test-utils'
+import ServerStatusCard from '../components/ServerStatusCard.vue'
 
-// 验收标准 3：实时状态 API 失败时优雅降级（显示"维护中"等）
+// 验收标准 3：实时状态 API 失败时优雅降级（显示「状态暂不可用」等）
 describe('服务器状态 store', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
@@ -89,5 +91,77 @@ describe('服务器状态 store', () => {
     await store.fetchStatus()
 
     expect(store.status).toBe('offline')
+  })
+
+  it('轮询刷新时保留上一次状态，不闪回 loading', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ online: true, players: 17 }),
+    } as Response)
+
+    const { useStatusStore } = await import('../stores/status')
+    const store = useStatusStore()
+    await store.fetchStatus()
+    expect(store.status).toBe('online')
+
+    // 第二次轮询：请求挂起期间，界面应继续展示上一次结果而不是「正在获取…」
+    let resolveSecond!: (v: Response) => void
+    vi.mocked(fetch).mockImplementationOnce(
+      () =>
+        new Promise<Response>((resolve) => {
+          resolveSecond = resolve
+        }),
+    )
+    const pending = store.fetchStatus()
+    expect(store.status).toBe('online')
+    expect(store.players).toBe(17)
+
+    resolveSecond({ ok: true, json: async () => ({ online: true, players: 20 }) } as Response)
+    await pending
+    expect(store.players).toBe(20)
+  })
+
+  it('主 API players 为非法字符串时，players 兜底为 0 而不是 NaN', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ online: true, players: 'abc' }),
+    } as Response)
+
+    const { useStatusStore } = await import('../stores/status')
+    const store = useStatusStore()
+    await store.fetchStatus()
+
+    expect(store.status).toBe('online')
+    expect(store.players).toBe(0)
+    expect(Number.isNaN(store.players)).toBe(false)
+  })
+
+  it('双 API 失败进入 error 时，保留上次成功检查时间', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ online: true, players: 5 }),
+    } as Response)
+
+    const { useStatusStore } = await import('../stores/status')
+    const store = useStatusStore()
+    await store.fetchStatus()
+    const lastCheck = store.lastCheck
+    expect(lastCheck).toBeInstanceOf(Date)
+
+    vi.mocked(fetch).mockRejectedValue(new Error('network down'))
+    await store.fetchStatus()
+
+    expect(store.status).toBe('error')
+    expect(store.lastCheck).toBe(lastCheck)
+  })
+
+  it('双 API 失败时，状态卡文案显示「状态暂不可用」而非「维护中」', async () => {
+    vi.mocked(fetch).mockRejectedValue(new Error('network down'))
+
+    const wrapper = mount(ServerStatusCard)
+    await flushPromises()
+
+    expect(wrapper.text()).toContain('状态暂不可用')
+    expect(wrapper.text()).not.toContain('维护中')
   })
 })

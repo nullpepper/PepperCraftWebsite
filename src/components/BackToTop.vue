@@ -60,7 +60,9 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 }
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.25s, transform 0.25s;
+  transition:
+    opacity 0.25s,
+    transform 0.25s;
 }
 .fade-enter-from,
 .fade-leave-to {
