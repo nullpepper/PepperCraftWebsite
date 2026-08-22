@@ -41,8 +41,14 @@ function scrollTo(id: string) {
 
 onMounted(() => {
   fpInstance = new fullpage('#fullpage', {
-    // GPLv3 免费 key 申请（开源项目表单）：https://alvarotrigo.com/fullPage/extensions/requestKey.html
-    // 填入真实 key 后：① 控制台 2 条 license 报错消失 ② 可设 credits.enabled: false 关闭署名水印
+    // fullpage.js v4 许可（决策记录：2026-08-22 业主决定暂不申请官方 GPL key，方案2）：
+    //   - 当前值 'GPLv3' 是 v3 时代写法，v4 的 isOK() 不认 → 每次初始化输出 2 条
+    //     "Incorrect `licenseKey`" 控制台报错（已知项，不影响功能）；
+    //   - 官方水印被 main.css 强隐（body .fp-watermark），合规缓冲为页脚
+    //     「基于 fullPage.js（GPLv3）构建」prominent notice；
+    //   - 若未来申请到有效 key（https://alvarotrigo.com/fullPage/extensions/requestKey.html）：
+    //     ① 控制台 2 条报错消失 ② 可设 credits.enabled: false 关闭署名水印；
+    //   - 项目出现任何商业/赞助行为前，请先购买商用许可（GPLv3 仅限开源非商业使用）。
     licenseKey: 'GPLv3',
     // 视觉
     navigation: false,
@@ -349,12 +355,18 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div class="faq-list">
-          <div v-for="(f, i) in FAQS" :key="f.q" class="faq-item" :class="{ open: faqOpen === i }">
+          <div
+            v-for="(f, i) in FAQS"
+            :key="f.q"
+            class="faq-item"
+            :class="{ open: faqOpen === i }"
+            :id="'faq-item-' + i"
+          >
             <button
               class="faq-q"
               :id="'faq-q-' + i"
               :aria-expanded="faqOpen === i"
-              :aria-controls="'faq-a-' + i"
+              :aria-controls="'faq-item-' + i"
               @click="faqOpen = faqOpen === i ? null : i"
             >
               <span class="faq-q-text">
@@ -771,7 +783,9 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: calc(var(--nav-h) + 28px) max(calc((100% - var(--container)) / 2), 24px) 30px 24px;
+  /* 左右等宽（原左 24px 固定、右 (100%-容器)/2 的不对称 padding 使内容块贴左）：
+     内容块整体水平居中、收进 --container，内部排版（字级/网格/对齐）不变 */
+  padding: calc(var(--nav-h) + 28px) max(calc((100% - var(--container)) / 2), 24px) 30px;
 }
 .features-head {
   margin-bottom: 22px;
@@ -931,7 +945,8 @@ onBeforeUnmount(() => {
   flex-direction: column;
   justify-content: center;
   gap: 16px;
-  padding: calc(var(--nav-h) + 26px) max(calc((100% - var(--container)) / 2), 24px) 26px 24px;
+  /* 同 .features-screen：左右等宽，内容块整体水平居中 */
+  padding: calc(var(--nav-h) + 26px) max(calc((100% - var(--container)) / 2), 24px) 26px;
 }
 .join-bg {
   position: absolute;

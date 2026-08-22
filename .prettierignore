@@ -1,6 +1,9 @@
 node_modules
 dist
 .build
+coverage
 package-lock.json
 # 交付产物文档（doublecheck 工具生成，不经 prettier）
 doublecheck-*.md
+# 评审报告（外部评审产物，非代码，不经 prettier）
+website-review.md

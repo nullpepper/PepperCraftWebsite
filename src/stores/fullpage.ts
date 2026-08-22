@@ -60,13 +60,16 @@ export const useFullPageStore = defineStore('fullpage', {
       // fullpage responsiveWidth/Height 会退化普通滚动（fp-responsive 类异步挂载），
       // 此时 moveTo 落点与内容实际高度不符，改用原生 scrollIntoView
       // （配合 html 的 scroll-padding-top 避开固定导航）。
+      // 注意：fullpage.js v4 把 fp-responsive 挂在 <body>（dist:2796），
+      // 选择器必须查 body；断点与其配置（responsiveWidth:900 / responsiveHeight:620，
+      // 均为严格小于，dist:2772-2773）逐一对齐。
       const responsive =
         typeof document !== 'undefined' &&
-        (!!document.querySelector('#fullpage.fp-responsive, .fullpage-wrapper.fp-responsive') ||
+        (document.body.classList.contains('fp-responsive') ||
           (typeof window !== 'undefined' &&
             typeof window.matchMedia === 'function' &&
-            window.matchMedia('(max-width: 768px)').matches) ||
-          (typeof window !== 'undefined' && window.innerHeight <= 620))
+            window.matchMedia('(max-width: 899px)').matches) ||
+          (typeof window !== 'undefined' && window.innerHeight < 620))
       if (responsive) {
         const section = document.querySelectorAll<HTMLElement>('.fp-section')[index]
         section?.scrollIntoView({ behavior: 'smooth', block: 'start' })

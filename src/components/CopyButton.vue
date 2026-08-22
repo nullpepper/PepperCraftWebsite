@@ -1,26 +1,44 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onBeforeUnmount } from 'vue'
 import AppIcon from './AppIcon.vue'
 
 /** 一键复制文本按钮 */
 const props = defineProps<{ text: string; label?: string }>()
 
 const copied = ref(false)
+let timer: number | null = null
 
 async function copy() {
+  let ok: boolean
   try {
     await navigator.clipboard.writeText(props.text)
+    ok = true
   } catch {
-    const ta = document.createElement('textarea')
-    ta.value = props.text
-    document.body.appendChild(ta)
-    ta.select()
-    document.execCommand('copy')
-    ta.remove()
+    // 回退 execCommand：旧浏览器 / 非安全上下文（http 下 clipboard API 不可用）
+    try {
+      const ta = document.createElement('textarea')
+      ta.value = props.text
+      document.body.appendChild(ta)
+      ta.select()
+      ok = document.execCommand('copy')
+      ta.remove()
+    } catch {
+      ok = false
+    }
   }
-  copied.value = true
-  setTimeout(() => (copied.value = false), 1800)
+  // 复制失败不显示「已复制」：避免假成功反馈
+  copied.value = ok
+  if (timer !== null) {
+    clearTimeout(timer)
+    timer = null
+  }
+  if (ok) timer = window.setTimeout(() => (copied.value = false), 1800)
 }
+
+onBeforeUnmount(() => {
+  // 卸载后不再触发状态更新（组件已脱离，避免滞留定时器）
+  if (timer !== null) clearTimeout(timer)
+})
 </script>
 
 <template>

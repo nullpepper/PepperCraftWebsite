@@ -111,3 +111,12 @@ describe('PepperCraft 网站核心行为', () => {
     expect(store.currentScreen.id).toBe('about')
   })
 })
+
+// ===== 部署产物：GitHub Pages 自定义域名文件必须进入 public/ =====
+describe('部署产物（public/CNAME）', () => {
+  it('public/CNAME 存在且内容与 canonical 域名一致（修复：仅仓库根 CNAME，dist 部署产物缺失）', async () => {
+    // 静态 ?raw 导入：文件缺失时模块解析失败（红）——这是本测试的失败语义
+    const { default: raw } = await import('../../public/CNAME?raw')
+    expect(raw.trim()).toBe(SITE.webDomain)
+  })
+})

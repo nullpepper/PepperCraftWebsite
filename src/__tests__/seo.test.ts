@@ -20,4 +20,17 @@ describe('SEO 基础元信息', () => {
     expect(html).toContain('application/ld+json')
     expect(html).toContain('"@type": "GameServer"')
   })
+
+  it('初始 HTML 内嵌首屏关键文本（无 JS 爬虫/禁 JS 用户可见，修复：body 仅 <div id="app"> 空白）', () => {
+    // 骨架放在 #app 内，Vue 挂载时整体替换，不会重复渲染
+    const appStart = html.indexOf('<div id="app">')
+    expect(appStart).toBeGreaterThan(-1)
+    const appBlock = html.slice(appStart)
+    // H1 是 Pepper<span>Craft</span>（双色字标），按 DOM 文本拆开断言
+    expect(appBlock).toContain('Pepper')
+    expect(appBlock).toContain('Craft')
+    expect(appBlock).toContain('pepper.ltd')
+    expect(appBlock).toContain('754966689') // QQ 群
+    expect(appBlock).toContain('docs.pepper.ltd') // 文档域名
+  })
 })

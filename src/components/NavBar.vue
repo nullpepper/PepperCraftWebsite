@@ -58,9 +58,11 @@ function go(id: string) {
 </script>
 
 <template>
+  <!-- 遮罩：点菜单外区域即关闭。必须与 header 平级——.nav 带 backdrop-filter
+       （blur(14px)），会把 fixed 后代的包含块约束到 header 内，
+       使遮罩 top/bottom 相对 64px 高的 header 坍缩为 0 高度而无法点击。 -->
+  <div v-if="open" class="nav-backdrop" aria-hidden="true" @click="open = false" />
   <header class="nav" :class="{ 'nav-scrolled': scrolled }">
-    <!-- 遮罩：点菜单外区域即关闭（置于导航内容之前，层叠在面板下层） -->
-    <div v-if="open" class="nav-backdrop" aria-hidden="true" @click="open = false" />
     <div class="container nav-inner">
       <button class="nav-brand" @click="go('hero')">
         <span class="brand-text">
@@ -69,7 +71,13 @@ function go(id: string) {
         </span>
       </button>
 
-      <nav class="nav-links" :class="{ open }" id="nav-links">
+      <nav
+        class="nav-links"
+        :class="{ open }"
+        id="nav-links"
+        :inert="!open || undefined"
+        :aria-hidden="open ? 'false' : 'true'"
+      >
         <button
           v-for="l in links"
           :key="l.id"
@@ -227,12 +235,18 @@ function go(id: string) {
     padding: 14px 20px 20px;
     gap: 2px;
     transform: translateY(-120%);
-    transition: transform 0.3s;
+    /* 关闭态移出 Tab 序与读屏（配合模板 inert/aria-hidden）：
+       visibility 可过渡，关闭动画期间仍可见，结束后彻底隐藏 */
+    visibility: hidden;
+    transition:
+      transform 0.3s,
+      visibility 0.3s;
     max-height: calc(100vh - var(--nav-h));
     overflow-y: auto;
   }
   .nav-links.open {
     transform: none;
+    visibility: visible;
   }
   .nav-links button {
     padding: 12px 14px;
@@ -242,13 +256,16 @@ function go(id: string) {
     margin: 8px 0 0;
     text-align: center;
   }
-  /* 遮罩盖住导航以下全屏：菜单面板（header 内、更靠后）绘制在其上 */
+  /* 遮罩盖住导航以下全屏：菜单面板（header 内、更靠后）绘制在其上。
+     z-index: 95 —— 低于 header(100)，高于页面内容与返回顶部(90)，
+     防止遮罩与内容层叠顺序不确定导致按钮穿透遮罩 */
   .nav-backdrop {
     position: fixed;
     top: var(--nav-h);
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 95;
     background: rgba(5, 8, 7, 0.55);
   }
 }

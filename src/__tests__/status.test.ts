@@ -220,3 +220,37 @@ describe('状态卡数据修复（主 API 真实字段）', () => {
     expect(store.maxPlayers).toBe(SITE.maxPlayers)
   })
 })
+
+// ===== 旧浏览器兼容：AbortSignal.timeout 为 Chrome 103+/Safari 16.4+ 才有 =====
+describe('AbortSignal.timeout 不可用时的 fallback', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    vi.stubGlobal('fetch', vi.fn())
+  })
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('timeout 缺失时主/备请求仍发起，且都携带 signal（修复前参数求值 TypeError，fetch 0 次调用）', async () => {
+    const original = (AbortSignal as unknown as Record<string, unknown>).timeout
+    Object.defineProperty(AbortSignal, 'timeout', { value: undefined, configurable: true })
+    try {
+      vi.mocked(fetch).mockRejectedValue(new Error('network down'))
+
+      const { useStatusStore } = await import('../stores/status')
+      const store = useStatusStore()
+      await store.fetchStatus()
+
+      expect(vi.mocked(fetch)).toHaveBeenCalledTimes(2) // 主 + 备
+      for (const call of vi.mocked(fetch).mock.calls) {
+        expect((call[1] as RequestInit).signal).toBeDefined()
+      }
+      expect(store.status).toBe('error')
+    } finally {
+      Object.defineProperty(AbortSignal, 'timeout', {
+        value: original,
+        configurable: true,
+      })
+    }
+  })
+})

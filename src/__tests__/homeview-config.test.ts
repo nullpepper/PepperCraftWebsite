@@ -68,4 +68,15 @@ describe('HomeView：评审修复（平板断点 / 首屏图片 / 卡头取景�
     const first = wrapper.findAll('.feature-media img')[0]
     expect(first.attributes('style') ?? '').toContain('bottom')
   })
+
+  it('每个 FAQ 按钮的 aria-controls 指向常驻存在的元素（修复：答案 v-if 时折叠项悬空引用）', () => {
+    const wrapper = mount(HomeView, { global: { plugins: [createPinia()] } })
+    const buttons = wrapper.findAll('.faq-q')
+    expect(buttons.length).toBeGreaterThan(1)
+    for (const btn of buttons) {
+      const id = btn.attributes('aria-controls')
+      expect(id).toBeTruthy()
+      expect(wrapper.element.querySelector('#' + id)).not.toBeNull()
+    }
+  })
 })

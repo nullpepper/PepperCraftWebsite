@@ -50,7 +50,68 @@
     </script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <!-- 首屏静态骨架：无 JS 环境/不执行 JS 的爬虫可见（百度等），且含 H1 与关键信息；
+           Vue 挂载时会整体替换为应用内容，两套内容不会并存。
+           骨架样式仅此内联块，避免与 main.css/组件样式互相干扰。 -->
+      <style>
+        .app-skeleton {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 12px;
+          padding: 40px 24px;
+          text-align: center;
+          background: #0d1010;
+          color: #f0f2ec;
+          font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        .app-skeleton-badge {
+          color: #89968d;
+          font-size: 14px;
+          margin: 0;
+        }
+        .app-skeleton-title {
+          font-size: clamp(40px, 9vw, 96px);
+          letter-spacing: -0.04em;
+          margin: 0;
+          line-height: 1.1;
+        }
+        .app-skeleton-title span {
+          color: #8dcc62;
+        }
+        .app-skeleton-slogan {
+          color: #c0c8bf;
+          font-size: 16px;
+          margin: 0;
+        }
+        .app-skeleton-ip {
+          color: #f0f2ec;
+          font-size: 18px;
+          margin: 6px 0 0;
+        }
+        .app-skeleton-ip code {
+          color: #58a6d6;
+          font-family: ui-monospace, Consolas, monospace;
+        }
+        .app-skeleton-links {
+          color: #89968d;
+          font-size: 13px;
+          margin: 0;
+        }
+      </style>
+      <div class="app-skeleton">
+        <p class="app-skeleton-badge">高版本纯净生存公益服</p>
+        <h1 class="app-skeleton-title">Pepper<span>Craft</span></h1>
+        <p class="app-skeleton-slogan">基于原版，忠于原版 —— PVP、生存、生电融合的高质量社区</p>
+        <p class="app-skeleton-ip">服务器 IP：<code>pepper.ltd</code></p>
+        <p class="app-skeleton-links">
+          交流群 754966689 · 官方文档 docs.pepper.ltd · 腐竹 QQ 2747789919
+        </p>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

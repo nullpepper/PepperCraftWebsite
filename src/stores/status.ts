@@ -38,9 +38,9 @@ export const useStatusStore = defineStore('status', {
       // 只有首次加载（初始 status 即 loading）才展示加载态。
       try {
         // 主 API：uapis.cn
-        const r = await fetch(
+        const r = await fetchWithTimeout(
           `https://uapis.cn/api/v1/game/minecraft/serverstatus?server=${SITE.ip}`,
-          { signal: AbortSignal.timeout(8000) },
+          8000,
         )
         const data = await r.json()
         if (data && data.online === true) {
@@ -70,9 +70,10 @@ export const useStatusStore = defineStore('status', {
       } catch {
         // 备用 API：mcstatus.io
         try {
-          const r2 = await fetch(`https://api.mcstatus.io/v2/status/java/${SITE.ip}`, {
-            signal: AbortSignal.timeout(8000),
-          })
+          const r2 = await fetchWithTimeout(
+            `https://api.mcstatus.io/v2/status/java/${SITE.ip}`,
+            8000,
+          )
           const d2 = await r2.json()
           if (d2 && d2.online === true) {
             this.status = 'online'
@@ -103,6 +104,20 @@ export const useStatusStore = defineStore('status', {
     },
   },
 })
+
+/**
+ * 带超时的 fetch。AbortSignal.timeout 需 Chrome 103+/Firefox 100+/Safari 16.4+，
+ * 旧浏览器上会让状态功能静默失效——回退到 AbortController + setTimeout，
+ * 并在请求结束（含中止）后清理定时器。
+ */
+function fetchWithTimeout(url: string, ms: number): Promise<Response> {
+  if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') {
+    return fetch(url, { signal: AbortSignal.timeout(ms) })
+  }
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), ms)
+  return fetch(url, { signal: controller.signal }).finally(() => clearTimeout(timer))
+}
 
 /**
  * 归一化在线人数：接受 number / 数字字符串；非法值（对象、NaN 字符串）兜底为

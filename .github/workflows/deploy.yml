@@ -25,7 +25,12 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      - run: npm run lint
+      - run: npm run format:check
       - run: npm run build
+      # CNAME 必须进入部署产物（public/CNAME → dist/CNAME），否则自定义域名可能失效
+      - name: Verify deploy artifact contains CNAME
+        run: test -f dist/CNAME
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
